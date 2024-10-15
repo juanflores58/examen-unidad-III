@@ -1,0 +1,25 @@
+#main-serie {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  align-items: flex;
+  min-height: 100vh;
+  background-color: #708b75;
+}
+
+.card-serie {
+  background-color: #a3b18a;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px #444b6e8a;
+  text-align: center;
+  margin: 10px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
