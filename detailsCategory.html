@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorias Cine</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+  <header>
+    Películas de Terror
+  </header>
+
+  <div>
+  <h3></h3><!--tremnda nacada es esto pero jala-->
+  </div>
+
+  <div class="dropdown">
+    <button>Películas</button>
+    <div class="dropdown-content">
+      <a href="#">Películas</a>
+      <a href="#">Series de TV</a>
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <button>Ordenar</button>
+    <div class="dropdown-content">
+      <a href="#">Por Nombre</a>
+      <a href="#">Por Popularidad</a>
+    </div>
+  </div>
+  <hr>
+
+  <div id="app" class="container">
+    <div class="pelicula" v-for="pelicula in peliculas" >
+      <img :src="pelicula.poster" :alt="pelicula.titulo">
+      <div class="detalles">
+        <h2>{{ pelicula.titulo }}</h2>
+        <p>{{ pelicula.fecha }}</p>
+        <p>{{ pelicula.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          peliculas: [
+            { id: 1, titulo: 'La Sustancia', fecha: '19 septiembre 2024', descripcion: 'Elisabeth Sparkle, una celebridad...', poster: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/4cJyrYA7I29QabrQ0S89N1iWUV2.jpg' },
+            { id: 2, titulo: 'Beetlejuice Beetlejuice', fecha: '5 septiembre 2024', descripcion: 'Después de una tragedia familiar...', poster: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/kWJw7dCWHcfMLr0irTHAPIKrJ4I.jpg' },
+            { id: 3, titulo: 'El hoyo 2', fecha: '4 octubre 2024', descripcion: 'Cuando un líder misterioso...', poster: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/8cnfdskwEmS1HZhenEVYt9P0IYa.jpg' },
+            { id: 4, titulo: 'Terrifier 3: Payaso Siniestro', fecha: '31 octubre 2024', descripcion: 'Después de sobrevivir...', poster: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/5eECVdOWwbsUARVxLA7ENyBYx3H.jpg' },
+            { id: 5, titulo: 'Hellboy: El Hombre Retorcido', fecha: '8 noviembre 2024', descripcion: 'Hellboy enfrenta...', poster: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/ExFaxmvlGxBmUBVKv9ey94fNyy.jpg' }
+          ]
+        };
+      }
+    }).mount('#app');
+  </script>
+
+<style>
+    /* CSS básico de la fokin maqueta */
+
+    header {
+      display: flex;
+      justify-content: flex-start; /* Colocar el titulo a la izquierda */
+      background-color: #39455B;
+      padding: 20px;
+      font-family: 'Arial', sans-serif; 
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #617C9A;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .pelicula {
+      background-color: #43536C;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgb(235, 231, 231);
+      display: flex;
+      align-items: center;
+      font-family: 'Arial', sans-serif; 
+      color: white;
+    }
+
+    .pelicula img {
+      width: 100px;
+      height: 150px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    .pelicula .detalles {
+      flex-grow: 1;
+    }
+
+    .pelicula .detalles h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .pelicula .detalles p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+
+    
+
+    /* dropdown */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      margin-right: 15px; 
+    }
+
+    /* Estilo para el botón */
+    .dropdown button {
+      background-color: #7A92A9;
+      border: 1px solid #66798a;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px; /* Borde redondeado */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+      transition: box-shadow 0.3s ease; /* Animación de sombra */
+    }
+
+    /* Cambiar la sombra cuando el botón es hover */
+    .dropdown button:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Estilo para el contenido del dropdown */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #93aac0;
+      min-width: 160px;    
+      border: 1px solid #ccc; /* Borde del menú */
+      border-radius: 5px; /* Borde redondeado */
+      z-index: 1;
+    }
+
+    /* Estilo para los elementos del dropdown */
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Cambiar color de los enlaces cuando paso el mouse */
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* abrir el dropdown*/
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+
+</body>
+</html>
