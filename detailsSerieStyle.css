@@ -5,7 +5,15 @@
 #0C111B
 #39455B
 #7A92A9*/
-
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #7a92a9;
+}
 #nav {
   background-color: #556a87;
   padding: 10px;
@@ -97,37 +105,69 @@
   color: #a3b18a;
 }
 
-.card {
-  background-color: #a3b18a;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px #444b6e8a;
+.card-serie {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   width: 90%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 10px auto;
+  gap: 20px;
+}
+
+.serie-info {
+  font-family: SimSun;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.generes {
+  font-family: SimSun;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .card img {
-  width: 120px;
+  width: 150px;
   height: auto;
   object-fit: cover;
   border-radius: 5px;
-  margin-right: 20px;
 }
 
 .card-content {
   flex: 1;
+  /* display: flex;
+  flex-direction: column; */
 }
 
 .card-content h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
-input[type="range"] {
+.card-content p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.generes ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.generes li {
+  background-color: #d6d6d6;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+/* input[type="range"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -190,4 +230,4 @@ button:hover {
   display: flex;
   justify-content: center;
   width: 100%;
-}
+} */
