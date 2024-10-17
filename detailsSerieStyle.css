@@ -1,3 +1,102 @@
+/*Paleta de colores
+#617C9A
+#556A87
+#43536C
+#0C111B
+#39455B
+#7A92A9*/
+
+#nav {
+  background-color: #556a87;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+#logo {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  align-items: center;
+}
+
+#logo img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+#nav-links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+}
+
+#nav-links li {
+  text-decoration: none;
+  color: #0c111b;
+}
+
+#nav-links li a {
+  text-decoration: none;
+  color: #0c111b;
+}
+
+#nav-links a:hover {
+  color: #a3b18a;
+}
+
+#search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+#search-bar input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+#search-bar button {
+  background-color: #7a92a9;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#search-bar button:hover {
+  background-color: #617c9a;
+}
+
+#nav-user {
+  display: flex;
+  gap: 20px;
+  list-style-type: none;
+}
+
+#nav-user li {
+  text-decoration: none;
+  color: #0c111b;
+}
+
+#nav-user li a {
+  text-decoration: none;
+  color: #0c111b;
+}
+
+#nav-user a:hover {
+  color: #a3b18a;
+}
+
 .card {
   background-color: #a3b18a;
   padding: 20px;

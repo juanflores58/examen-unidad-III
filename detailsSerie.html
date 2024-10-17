@@ -11,8 +11,27 @@
 
 <body>
     <div id="main">
+        <div id="nav">
+            <div id="logo">
+                <img src="logo.png" alt="logo">
+                <h1>WebSite</h1>
+            </div>
+            <ul id="nav-links">
+                <li><a href="HTML HOME.html">Home</a></li>
+                <li><a href="homeSerie.html">Series</a></li>
+                <li><a href="homeMovie.html">Movies</a></li>
+            </ul>
+            <div id="search-bar">
+                <input type="text" placeholder="Search...">
+                <button>Search</button>
+            </div>
+            <ul id="nav-user">
+                <li><a href="login.html">Login</a></li>
+                <li><a href="singUp.html">Sing Up</a></li>
+            </ul>
+        </div>
         <div class="card-serie" v-if="serieId">
-            <img :src="`https://image.tmdb.org/t/p/w500/${serie.poster_path}`" alt="serie poster">
+            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="serie poster">
             <div class="serie-info">
                 <h2>{{ serie.name }}</h2>
                 <p>{{ serie.original_name }}</p>
@@ -29,18 +48,19 @@
                 <p><strong>Vote Average:</strong></p>
                 <p><strong>Vote Count:</strong></p>
                 <p><strong>Rate this movie:</strong></p>
-                <input type="range" v-model="rating" min="0" max="10" step="0.5" />
+                <!-- <input type="range" v-model="rating" min="0" max="10" step="0.5" />
                 <p>{{ rating }}</p>
                 <div class="buttons">
                     <button @click="saveRating">Save</button>
                     <button @click="deleteRating">Delete</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
     <script>
 
         const app = Vue.createApp({
+
             data() {
                 return {
                     serieId: null,
@@ -49,29 +69,40 @@
                 }
             },
             methods: {
-
                 goToDetails(serie) {
                     console.log(`Fetching details for movie ID: ${serie.id}`);
-                    const url = `https://api.themoviedb.org/3/discover/tv?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`; //TODO ESTE TIEMPO FUE UN THIIIIIIS AAAAAAA, la lógica se fue de sabatico, je.
                     console.log('API URL:', url)
 
                     fetch(url)
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error('Network response was not ok');
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
                             }
                             return response.json();
                         })
                         .then(data => {
                             console.log(data);
                             this.serie = data;
+                            // this.loadRating();
                         })
                         .catch(error => {
                             console.error('Error:', error);
                         });
-                }
+                },
+                getSerieIdFromUrl() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('id');
+                },
             },
             mounted() {
+                this.serieId = this.getSerieIdFromUrl();
+                console.log('Serie ID:', this.serieId);
+                if (this.serieId) {
+                    this.goToDetails(this.serieId);
+                } else {
+                    console.log('No serie ID found');
+                }
             }
 
         }).mount('#main')
