@@ -1,0 +1,94 @@
+.card {
+  background-color: #a3b18a;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px #444b6e8a;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 90%;
+  max-width: 500px;
+  margin: 10px auto;
+}
+
+.card img {
+  width: 120px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+input[type="range"]:hover {
+  opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #fdff8b;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ecf691;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  background: #e9d767;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #8ca578;
+  color: rgb(84, 76, 89);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  margin: 0 5px;
+}
+
+button:hover {
+  background-color: #dbe5b0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
