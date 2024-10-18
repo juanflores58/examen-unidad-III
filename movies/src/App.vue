@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pagina de peliculas examen Unidad 3</title>
-    <link rel="stylesheet" href="css_home.css">
-</head>
-<body>
+<template>
+  <div id="app">
     <!-- Encabezado -->
     <header>
         <div class="container">
-            <img src="logo.png" alt="Logo de Cinema" class="logo-img">
+            <img src="./assets/logo.png" alt="Logo de Cinema" class="logo-img">
             <div class="logo">
                 <h1>CINEMA c:</h1>
             </div>
@@ -31,19 +24,15 @@
             <nav>
                 <ul>
                     <li><a href="#">Log in</a></li>
-                    <li><a href="#">logout</output></output></a></li>
+                    <li><a href="#">logout</a></li>
                 </ul>
             </nav>
-
-
         </div>
     </header>
-        
 
     <!-- Sección de Tendencias -->
     <main>
         <div class="container">
-            <!-- Tendencias -->
             <section class="tendencias">
                 <h2>Tendencias</h2>
                 <div class="movie-grid">
@@ -51,7 +40,6 @@
                 </div>
             </section>
 
-            <!-- Lo Más Popular -->
             <section class="popular">
                 <h2>Lo Más Popular</h2>
                 <div class="movie-grid">
@@ -59,19 +47,17 @@
                 </div>
             </section>
 
-            <!-- Ver Gratis -->
             <section class="ver-gratis">
                 <h2>Ver Gratis</h2>
                 <div class="movie-grid">
-                    <!-- Películas gratuitas (o simuladas) se cargarán aquí -->
+                    <!-- Películas gratuitas se cargarán aquí -->
                 </div>
             </section>
 
-            <!-- Series o TV -->
             <section class="series-tv">
                 <h2>Series o TV</h2>
                 <div class="movie-grid">
-                    <!-- Series o programas de TV populares se cargarán aquí -->
+                    <!-- Series o programas de TV se cargarán aquí -->
                 </div>
             </section>
         </div>
@@ -83,10 +69,15 @@
             <p>&copy; PAGINA DE PELICULAS PIRATAS PARA LA CLASE DE JHONA todos los derechos reservados SA. DE CV.</p>
         </div>
     </footer>
+  </div>
+</template>
 
-    <!-- Incluir el archivo JavaScript -->
-    <script src="js_de_home.js"></script>
-    <script src="https://unpkg.com/vue@next"></script>
+<script>
+export default {
+  name: 'App',
+}
+</script>
 
-</body>
-</html>
+<style>
+/* Puedes agregar tu archivo CSS aquí o importarlo si lo tienes en un archivo separado */
+</style>
