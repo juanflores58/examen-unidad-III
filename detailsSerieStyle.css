@@ -71,16 +71,9 @@ nav ul li a {
   max-width: 900px;
 }
 
-.card-header {
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
 .imagen {
-  flex: 0 0 200px;
-  margin-right: 0;
+  flex: 0 0 150px;
+  margin: 0;
 }
 
 .imagen img {
@@ -88,6 +81,7 @@ nav ul li a {
   height: auto;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
+  object-fit: cover;
 }
 
 .card-content {

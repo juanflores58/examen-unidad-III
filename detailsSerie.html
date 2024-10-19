@@ -44,11 +44,10 @@
     </header>
 
     <div class="card-serie" v-if="serieId">
-        <div class="card-header">
-            <div class="imagen">
-                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path"
-                    alt="serie poster">
-            </div>
+
+        <div class="imagen">
+            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="serie poster">
+
         </div>
         <div class="card-content">
             <div class="serie-info">
