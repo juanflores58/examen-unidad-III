@@ -116,6 +116,28 @@ nav ul li a {
 .details {
   margin-top: 10px;
 }
+.trailer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  left: 400px;
+}
+.trailer h3 {
+  margin-bottom: 10px;
+}
+
+.trailer iframe {
+  border: 2px solid #1b2845;
+  box-shadow: 0 0 0.5rem #1b2845;
+  border-radius: 0.5rem;
+  max-width: 400px;
+  /* width: 100%; */
+  height: 200px;
+  margin: 0 auto;
+  position: relative;
+  left: 20px;
+}
 
 .cast {
   display: flex;

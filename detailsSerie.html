@@ -72,6 +72,14 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="trailer" v-if="videoIdUrl">
+            <!-- <h2>Trailer</h2> -->
+            <iframe width="560" height="315" :src="videoIdUrl" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
+    </div>
 
     <div class="cast" v-if="cast.length > 0">
         <div class="cast-card" v-for="castMember in cast" :key="castMember.id">
@@ -109,6 +117,7 @@
                 cast: [],
                 season: {},
                 openSeasons: null,
+                videoIdUrl: null,
                 rating: 0
             }
         },
@@ -129,6 +138,7 @@
                         console.log(data);
                         this.serie = data;
                         this.getCast();
+                        this.getVideos();
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -139,6 +149,33 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get('id');
             },
+
+            getVideos() {
+                const requestOptions = {
+                    method: "GET",
+                    redirect: "follow"
+                };
+
+                fetch(`https://api.themoviedb.org/3/tv/${this.serieId}/videos?api_key=e2f892788bdea42be5636a47bc7ffdd5`, requestOptions)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.results && data.results.length > 0) {
+                            const trailer = data.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+                            if (trailer) {
+                                this.videoIdUrl = `https://www.youtube.com/embed/${trailer.key}`;
+                            } else {
+                                console.log('No YouTube video found');
+                            }
+                        }
+                    })
+                    .catch((error) => console.error(error));
+            },
+
             getCast() {
                 const url = `https:api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
                 fetch(url)
