@@ -7,6 +7,10 @@
     <title>Detalles de la Serie</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="detailsSerieStyle.css">
 </head>
 
@@ -32,7 +36,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Log in</a></li>
+                    <li><a href="Login.html">Log in</a></li>
                     <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
@@ -57,6 +61,7 @@
                 <h3>Generes</h3>
                 <ul>
                     <li v-for="genre in serie.genres">{{ genre.name }}</li>
+                    <!-- <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a> -->
                 </ul>
             </div>
             <div class="details">
@@ -73,9 +78,26 @@
         <div class="cast-card" v-for="castMember in cast" :key="castMember.id">
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + castMember.profile_path"
                 alt="cast member profile">
-            <p>{{ castMember.name }}</p>
+            <p><strong>{{ castMember.name }}</strong></p>
         </div>
     </div>
+    <div class="accordion" id="accordion">
+        <h3>Seasons</h3>
+        <div class="accordion-item" v-for="season in serie.seasons" :key="season.id">
+            <h2 class="accordion-header" :id="'heading' + season.id">
+                <button class="accordion-button" type="button" @click="toggleSeason(season.id)">
+                    Season {{ season.season_number }}: {{ season.name }}
+                </button>
+            </h2>
+            <div :id="'collapse' + season.id" class="accordion-collapse collapse" :class="{ show: isOpen(season.id) }">
+                <div class="accordion-body">
+                    <p><strong>Air Date:</strong> {{ season.air_date }}</p>
+                    <p><strong>Episode Count:</strong> {{ season.episode_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
 
@@ -86,6 +108,8 @@
                 serieId: null,
                 serie: {},
                 cast: [],
+                season: {},
+                openSeasons: null,
                 rating: 0
             }
         },
@@ -133,6 +157,14 @@
 
                     });
 
+            },
+
+            toggleSeason(seasonId) {
+                this.openSeasons = this.openSeasons === seasonId ? null : seasonId;
+
+            },
+            isOpen(seasonId) {
+                return this.openSeasons === seasonId;
             },
             goToCategory(genreId) {
                 window.location.href = `detailsCategory.html?genreId=${genreId}`;
