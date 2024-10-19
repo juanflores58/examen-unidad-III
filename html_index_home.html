@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pagina de peliculas examen Unidad 3</title>
+    <title>Página de Películas - Examen Unidad 3</title>
     <link rel="stylesheet" href="css_home.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
+
 <body>
     <!-- Encabezado -->
     <header>
@@ -27,27 +30,27 @@
                 <input type="text" placeholder="Buscar...">
                 <button>Buscar</button>
             </div>
-
             <nav>
                 <ul>
                     <li><a href="#">Log in</a></li>
-                    <li><a href="#">logout</output></output></a></li>
+                    <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
-
-
         </div>
     </header>
-        
 
-    <!-- Sección de Tendencias -->
-    <main>
+    <!-- Sección de Tendencias y Series/TV -->
+    <main id="main-content">
         <div class="container">
             <!-- Tendencias -->
             <section class="tendencias">
                 <h2>Tendencias</h2>
                 <div class="movie-grid">
-                    <!-- Películas de tendencia se cargarán aquí -->
+                    <div v-for="movie in trendingMovies" :key="movie.id" class="card" @click="goToDetails(movie)">
+                        <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="poster">
+                        <h3>{{ movie.title }}</h3>
+                        <p>{{ movie.release_date }}</p>
+                    </div>
                 </div>
             </section>
 
@@ -55,7 +58,11 @@
             <section class="popular">
                 <h2>Lo Más Popular</h2>
                 <div class="movie-grid">
-                    <!-- Películas populares se cargarán aquí -->
+                    <div v-for="movie in popularMovies" :key="movie.id" class="card" @click="goToDetails(movie)">
+                        <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="poster">
+                        <h3>{{ movie.title }}</h3>
+                        <p>{{ movie.release_date }}</p>
+                    </div>
                 </div>
             </section>
 
@@ -63,7 +70,11 @@
             <section class="ver-gratis">
                 <h2>Ver Gratis</h2>
                 <div class="movie-grid">
-                    <!-- Películas gratuitas (o simuladas) se cargarán aquí -->
+                    <div v-for="movie in freeMovies" :key="movie.id" class="card" @click="goToDetails(movie)">
+                        <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="poster">
+                        <h3>{{ movie.title }}</h3>
+                        <p>{{ movie.release_date }}</p>
+                    </div>
                 </div>
             </section>
 
@@ -71,7 +82,11 @@
             <section class="series-tv">
                 <h2>Series o TV</h2>
                 <div class="movie-grid">
-                    <!-- Series o programas de TV populares se cargarán aquí -->
+                    <div v-for="serie in series" :key="serie.id" class="card" @click="goToDetails(serie)">
+                        <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="poster">
+                        <h3>{{ serie.name }}</h3>
+                        <p>{{ serie.first_air_date }}</p>
+                    </div>
                 </div>
             </section>
         </div>
@@ -84,9 +99,67 @@
         </div>
     </footer>
 
-    <!-- Incluir el archivo JavaScript -->
-    <script src="js_de_home.js"></script>
-    <script src="https://unpkg.com/vue@next"></script>
+    <!-- Script de Vue.js -->
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    trendingMovies: [],
+                    popularMovies: [],
+                    freeMovies: [],
+                    series: [],
+                }
+            },
+            methods: {
+                getTrendingMovies() {
+                    fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.trendingMovies = data.results;
+                        })
+                        .catch(error => console.log(error));
+                },
+                getPopularMovies() {
+                    fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.popularMovies = data.results;
+                        })
+                        .catch(error => console.log(error));
+                },
+                getFreeMovies() {
+                    // Simulated free movies, as TMDb doesn't have a specific endpoint for "free" movies
+                    fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.freeMovies = data.results.slice(0, 10); // Just displaying a few as "free"
+                        })
+                        .catch(error => console.log(error));
+                },
+                getSeries() {
+                    fetch('https://api.themoviedb.org/3/tv/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.series = data.results;
+                        })
+                        .catch(error => console.log(error));
+                },
+                goToDetails(item) {
+                    const id = item.id;
+                    const type = item.title ? 'movie' : 'tv'; // Differentiates between movies and series
+                    window.location.href = `${type}-details.html?id=${id}`;
+                },
+            },
+            mounted() {
+                this.getTrendingMovies();
+                this.getPopularMovies();
+                this.getFreeMovies();
+                this.getSeries();
+            }
+        }).mount('#main-content');
+    </script>
 
 </body>
+
 </html>
