@@ -1,4 +1,4 @@
-/*#274060, #335C81, #65AFFF, #1B2845, #5899E2*/
+/*#C1BDDB, 5D5D81, 3B3355, 04111c*/
 .container {
   width: 80%;
   margin: 0 auto;
@@ -8,7 +8,7 @@
 }
 
 header {
-  background-color: #032541;
+  background-color: #04111c;
   padding: 15px 0;
   color: white;
 }
@@ -56,7 +56,7 @@ nav ul li a {
 
 .search-bar button {
   padding: 5px 10px;
-  background-color: #01b4e4;
+  background-color: #344966;
   color: white;
   border: none;
   cursor: pointer;
@@ -69,6 +69,7 @@ nav ul li a {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
   max-width: 900px;
+  background-color: #c1bddb;
 }
 
 .imagen {
@@ -185,7 +186,7 @@ nav ul li a {
 }
 
 .accordion {
-  background-color: #274060;
+  background-color: #3b3355;
   border-radius: 8px;
   margin: 20px;
   padding: 10px;
@@ -205,8 +206,8 @@ nav ul li a {
 }
 
 .accordion-button {
-  background-color: #335c81;
-  color: #65afff;
+  background-color: #5d5d81;
+  color: #fff;
   text-align: left;
   padding: 15px;
   border: none;
@@ -216,16 +217,22 @@ nav ul li a {
 }
 
 .accordion-button:hover {
-  background-color: #5899e2;
+  background-color: #000500;
 }
 
 .accordion-body {
   padding: 15px;
-  border-top: 1px solid #65afff;
+  border-top: 1px solid #6665dd;
   color: #ffffff;
 }
 
 h3 {
-  color: #65afff;
+  color: #fff;
   margin: 0 0 10px;
+  align-items: center;
+  text-align: center;
+}
+
+#main {
+  background-color: #c1bddb;
 }
