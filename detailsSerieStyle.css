@@ -1,3 +1,4 @@
+/*#274060, #335C81, #65AFFF, #1B2845, #5899E2*/
 .container {
   width: 80%;
   margin: 0 auto;
@@ -78,7 +79,7 @@ nav ul li a {
 }
 
 .imagen {
-  flex: 0 0 150px;
+  flex: 0 0 200px;
   margin-right: 0;
 }
 
@@ -127,10 +128,15 @@ nav ul li a {
   overflow-x: auto;
   padding: 10px 0;
   gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
 }
 
 .cast::-webkit-scrollbar {
   height: 8px;
+  width: 100%;
 }
 
 .cast::-webkit-scrollbar-thumb {
@@ -147,16 +153,62 @@ nav ul li a {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .cast-card img {
-  width: 50px;
-  height: auto;
+  width: 70px;
+  height: 100px;
   object-fit: cover;
   border-radius: 5px;
 }
 
 .cast-card p {
-  font-size: 0.9rem;
+  font-size: 1rem;
+}
+
+.accordion {
+  background-color: #274060;
+  border-radius: 8px;
+  margin: 20px;
+  padding: 10px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.accordion-item {
+  border: none;
+  margin-bottom: 10px;
+}
+
+.accordion-header {
+  margin: 0;
+}
+
+.accordion-button {
+  background-color: #335c81;
+  color: #65afff;
+  text-align: left;
+  padding: 15px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.accordion-button:hover {
+  background-color: #5899e2;
+}
+
+.accordion-body {
+  padding: 15px;
+  border-top: 1px solid #65afff;
+  color: #ffffff;
+}
+
+h3 {
+  color: #65afff;
+  margin: 0 0 10px;
 }
