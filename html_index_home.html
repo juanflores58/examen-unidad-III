@@ -148,7 +148,7 @@
 
             goToDetails(item) {
     const id = item.id;
-    const type = item.title ? 'movie-details' : 'detailsSeries'; // Asegúrate de que 'tv' fue reemplazado por 'detailsSeries'
+    const type = item.title ? 'detailsmovie' : 'detailsSerie'; // Asegúrate de que 'tv' fue reemplazado por 'detailsSeries'
     window.location.href = `${type}.html?id=${id}`;
 }
         },
