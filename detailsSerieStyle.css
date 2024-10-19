@@ -136,7 +136,8 @@ nav ul li a {
   height: 200px;
   margin: 0 auto;
   position: relative;
-  left: 20px;
+  left: 250px;
+  top: -230px;
 }
 
 .cast {
