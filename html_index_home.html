@@ -99,66 +99,68 @@
         </div>
     </footer>
 
-    <!-- Script de Vue.js -->
-    <script>
-        const { createApp } = Vue;
-        createApp({
-            data() {
-                return {
-                    trendingMovies: [],
-                    popularMovies: [],
-                    freeMovies: [],
-                    series: [],
-                }
-            },
-            methods: {
-                getTrendingMovies() {
-                    fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.trendingMovies = data.results;
-                        })
-                        .catch(error => console.log(error));
-                },
-                getPopularMovies() {
-                    fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.popularMovies = data.results;
-                        })
-                        .catch(error => console.log(error));
-                },
-                getFreeMovies() {
-                    // Simulated free movies, as TMDb doesn't have a specific endpoint for "free" movies
-                    fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.freeMovies = data.results.slice(0, 10); // Just displaying a few as "free"
-                        })
-                        .catch(error => console.log(error));
-                },
-                getSeries() {
-                    fetch('https://api.themoviedb.org/3/tv/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.series = data.results;
-                        })
-                        .catch(error => console.log(error));
-                },
-                goToDetails(item) {
-                    const id = item.id;
-                    const type = item.title ? 'movie' : 'tv'; // Differentiates between movies and series
-                    window.location.href = `${type}-details.html?id=${id}`;
-                },
-            },
-            mounted() {
-                this.getTrendingMovies();
-                this.getPopularMovies();
-                this.getFreeMovies();
-                this.getSeries();
+<!-- Script de Vue.js -->
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                trendingMovies: [],
+                popularMovies: [],
+                freeMovies: [],
+                series: [],
             }
-        }).mount('#main-content');
-    </script>
+        },
+        methods: {
+            getTrendingMovies() {
+                fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.trendingMovies = data.results;
+                    })
+                    .catch(error => console.log(error));
+            },
+            getPopularMovies() {
+                fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.popularMovies = data.results;
+                    })
+                    .catch(error => console.log(error));
+            },
+            getFreeMovies() {
+                // Simulated free movies, as TMDb doesn't have a specific endpoint for "free" movies
+                fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.freeMovies = data.results.slice(0, 10); // Just displaying a few as "free"
+                    })
+                    .catch(error => console.log(error));
+            },
+            getSeries() {
+                fetch('https://api.themoviedb.org/3/tv/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.series = data.results;
+                    })
+                    .catch(error => console.log(error));
+            },
+
+            goToDetails(item) {
+    const id = item.id;
+    const type = item.title ? 'movie-details' : 'detailsSeries'; // Asegúrate de que 'tv' fue reemplazado por 'detailsSeries'
+    window.location.href = `${type}.html?id=${id}`;
+}
+        },
+        mounted() {
+            this.getTrendingMovies();
+            this.getPopularMovies();
+            this.getFreeMovies();
+            this.getSeries();
+        }
+    }).mount('#main-content');
+</script>
+
 
 </body>
 
