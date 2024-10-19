@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categoría Películas/Series</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+</head>
+<body>
+
+  <header>
+    Películas y Series por Categoría
+  </header>
+
+  <!-- Dropdown de Películas y Series -->
+  <div class="dropdown">
+    <button>Mostrar</button>
+    <div class="dropdown-content">
+      <a href="#" @click.prevent="filterMedia('movie')">Películas</a>
+      <a href="#" @click.prevent="filterMedia('tv')">Series de TV</a>
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <button>Ordenar</button>
+    <div class="dropdown-content">
+      <a href="#" @click.prevent="sortBy('name')">Por Nombre</a>
+      <a href="#" @click.prevent="sortBy('popularity')">Por Popularidad</a>
+    </div>
+  </div>
+
+  <hr>
+ <!-- No me lo muevan sin avisar-->
+  <div id="app" class="container">
+    <div class="pelicula" v-for="item in filteredMedia" :key="item.id">
+      <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + item.poster_path" :alt="item.title || item.name">
+      <div class="detalles">
+        <h2>{{ item.title || item.name }}</h2>
+        <p>{{ item.release_date || item.first_air_date }}</p>
+        <p>{{ item.overview }}</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          media: [], 
+          mediaType: 'movie', 
+          sortByOption: 'popularity', 
+          genreId: null, 
+        };
+      },
+      computed: {
+        filteredMedia() {
+          let sorted = [...this.media];
+          
+          if (this.sortByOption === 'name') {
+            sorted.sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name));
+          } else if (this.sortByOption === 'popularity') {
+            sorted.sort((a, b) => b.popularity - a.popularity);
+          }
+
+          return sorted;
+        }
+      },
+      methods: {
+        fetchMedia() {
+          const apiKey = 'e2f892788bdea42be5636a47bc7ffdd5'; 
+          const url = `https://api.themoviedb.org/3/discover/${this.mediaType}?api_key=${apiKey}&with_genres=${this.genreId}`;
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              this.media = data.results;
+            })
+            .catch(error => {
+              console.error('A ocurrido un error:', error);
+            });
+        },
+        //no funciona
+        filterMedia(type) {
+          this.mediaType = type;
+          this.fetchMedia(); 
+        },
+        sortBy(option) {
+          this.sortByOption = option; 
+        },
+        getGenreIdFromUrl() {
+          const urlParams = new URLSearchParams(window.location.search);
+          this.genreId = urlParams.get('genreId');
+        }
+      },
+      //esto de abajo si
+      mounted() {
+        this.getGenreIdFromUrl(); 
+        this.fetchMedia();
+      }
+    }).mount('#app');
+  </script>
+
+  <style>
+   /*ya despues hago un css aparte*/
+    header {
+      display: flex;
+      justify-content: flex-start; 
+      background-color: #39455B;
+      padding: 20px;
+      font-family: 'Arial', sans-serif; 
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #617C9A;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .pelicula {
+      background-color: #43536C;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgb(235, 231, 231);
+      display: flex;
+      align-items: center;
+      font-family: 'Arial', sans-serif; 
+      color: white;
+    }
+
+    .pelicula img {
+      width: 100px;
+      height: 150px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    .pelicula .detalles {
+      flex-grow: 1;
+    }
+
+    .pelicula .detalles h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .pelicula .detalles p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    .dropdown button {
+      background-color: #7A92A9;
+      border: 1px solid #66798a;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .dropdown button:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #93aac0;
+      min-width: 160px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+
+</body>
+</html>

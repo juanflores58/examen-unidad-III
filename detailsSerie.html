@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Detalles de la Serie</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="detailsSerieStyle.css">
 </head>
@@ -37,23 +37,21 @@
                 <p>{{ serie.original_name }}</p>
                 <p>{{ serie.overview }}</p>
                 <p><strong>First Air Date:</strong> {{ serie.first_air_date }} </p>
+
+                <!-- Generos con clic para redirigir -->
                 <div class="generes">
-                    <h3>Generes</h3>
+                    <h3>Géneros</h3>
                     <ul>
-                        <li v-for="genre in serie.genres">{{ genre.name }}</li>
+                        <li v-for="genre in serie.genres" :key="genre.id">
+                            <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a>
+                        </li>
                     </ul>
                 </div>
+
                 <p><strong>Original Language:</strong> {{ serie.original_language }}</p>
                 <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
-                <p><strong>Vote Average:</strong></p>
-                <p><strong>Vote Count:</strong></p>
-                <p><strong>Rate this movie:</strong></p>
-                <!-- <input type="range" v-model="rating" min="0" max="10" step="0.5" />
-                <p>{{ rating }}</p>
-                <div class="buttons">
-                    <button @click="saveRating">Save</button>
-                    <button @click="deleteRating">Delete</button>
-                </div> -->
+                <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
+                <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
             </div>
         </div>
     </div>
@@ -71,7 +69,7 @@
             methods: {
                 goToDetails(serie) {
                     console.log(`Fetching details for movie ID: ${serie.id}`);
-                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`; //TODO ESTE TIEMPO FUE UN THIIIIIIS AAAAAAA, la lógica se fue de sabatico, je.
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
                     console.log('API URL:', url)
 
                     fetch(url)
@@ -84,7 +82,6 @@
                         .then(data => {
                             console.log(data);
                             this.serie = data;
-                            // this.loadRating();
                         })
                         .catch(error => {
                             console.error('Error:', error);
@@ -94,6 +91,10 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');
                 },
+                goToCategory(genreId) {
+                 // Redirigi a la página de detailsCategoryel.html mami
+                     window.location.href = `detailsCategory.html?genreId=${genreId}`;
+                                        }
             },
             mounted() {
                 this.serieId = this.getSerieIdFromUrl();
