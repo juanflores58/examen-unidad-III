@@ -114,6 +114,11 @@ nav ul li a {
   border-radius: 5px;
 }
 
+.generes h3 {
+  font-family: Arial;
+  color: black;
+}
+
 .details {
   margin-top: 10px;
 }
@@ -235,4 +240,5 @@ h3 {
 
 #main {
   background-color: #c1bddb;
+  font-family: Arial;
 }

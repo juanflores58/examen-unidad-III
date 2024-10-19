@@ -5,11 +5,11 @@
   justify-content: center;
   align-items: flex;
   min-height: 100vh;
-  background-color: #708b75;
+  background-color: #c1bddb;
 }
 
 .card-serie {
-  background-color: #a3b18a;
+  background-color: #c1bddb;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px #444b6e8a;
@@ -33,7 +33,7 @@ img {
 }
 
 header {
-  background-color: #032541;
+  background-color: #04111c;
   padding: 15px 0;
   color: white;
 }
@@ -81,7 +81,7 @@ nav ul li a {
 
 .search-bar button {
   padding: 5px 10px;
-  background-color: #01b4e4;
+  background-color: #344966;
   color: white;
   border: none;
   cursor: pointer;
