@@ -10,51 +10,93 @@
 </head>
 
 <body>
+    <header>
+        <div class="container">
+            <img src="logo.png" alt="Logo de Cinema" class="logo-img">
+            <div class="logo">
+                <h1>WebSite</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="html_index_home.html">Inicio</a></li>
+                    <li><a href="#">Películas</a></li>
+                    <li><a href="homeSerie.html">Series/TV</a></li>
+                    <li><a href="#">Ver Gratis</a></li>
+                    <li><a href="#">Explorar</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button>Buscar</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Log in</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     <div id="main-serie">
         <div id="card-serie" v-for="serie in series" :key="serie.id" @click="goToDetails(serie)">
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="serie poster">
             <h2>{{ serie.name }}</h2>
             <h3>{{ serie.first_air_date }}</h3>
         </div>
-
+        <h3>{{ numPage }}</h3>
+        <button @click="changePage('previous')" :disabled="numPage === 1">Previous</button>
+        <button @click="changePage('next')">Next</button>
     </div>
 
+
     <script>
-        const { createApp, ref } = Vue;
+        const { createApp } = Vue;
+
         createApp({
             data() {
                 return {
                     series: [],
-                    viewport: 'series'
-                }
+                    numPage: 1,
+                    totalPages: 1,
+                };
             },
             methods: {
-                getSeries() {
-                    fetch('https://api.themoviedb.org/3/discover/tv?api_key=e2f892788bdea42be5636a47bc7ffdd5')
-                        .then(response => response.json())
+                getSeries(page = 1) {
+                    const url = `https://api.themoviedb.org/3/discover/tv?api_key=e2f892788bdea42be5636a47bc7ffdd5&page=${page}`;
+                    console.log("Fetching URL:", url);
+
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
                         .then(data => {
-                            console.log(data)
                             this.series = data.results;
+                            this.totalPages = data.total_pages;
                         })
                         .catch(error => {
-                            console.log("Error: " + error)
-                        })
+                            console.log("Error: " + error);
+                        });
                 },
-
+                changePage(direction) {
+                    if (direction === 'next') {
+                        this.numPage++;
+                    } else if (direction === 'previous' && this.numPage > 1) {
+                        this.numPage--;
+                    }
+                    this.getSeries(this.numPage);
+                },
                 goToDetails(serie) {
-                    console.log(serie);
                     const serieId = serie.id;
-                    window.location.href = window.location.href = `detailsSerie.html?id=${serieId}`
-
+                    window.location.href = `detailsSerie.html?id=${serieId}`;
                 },
             },
             mounted() {
-                console.log('App mounted')
                 this.getSeries();
             }
-
-        }).mount('#main-serie')
-
+        }).mount('#main-serie');
     </script>
 
 

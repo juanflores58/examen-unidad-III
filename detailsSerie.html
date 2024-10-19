@@ -64,7 +64,7 @@
                 <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
                 <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
                 <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
-                <p><strong>Rate this movie:</strong></p>
+                <!-- <p><strong>Rate this movie:</strong></p> -->
             </div>
         </div>
     </div>
@@ -111,6 +111,7 @@
                         console.error('Error:', error);
                     });
             },
+
             getSerieIdFromUrl() {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get('id');
