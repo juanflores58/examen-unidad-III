@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelicula</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style type="text/css">
+        #main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #6196ae;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #4852dd83;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px #444b6e8a;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            width: 90%;
+            max-width: 500px;
+            margin: 10px auto;
+        }
+
+        .card img {
+            width: 120px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-content h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .rating-checkboxes {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .rating-checkboxes label {
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .rating-checkboxes input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .rating-checkboxes input[type="checkbox"]:checked {
+            background-color: #000000;
+            border-color: #dbe5b0;
+        }
+
+        .rating-checkboxes input[type="checkbox"]::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: white;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .rating-checkboxes input[type="checkbox"]:checked::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            
+            background-color: #7095f1;
+            color: rgb(84, 76, 89);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            margin: 0 5px;
+        }
+
+        button:hover {
+            background-color: #4875e4;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main" class="details">
+
+        <div class="card" v-if="movie.id">
+            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
+            <div class="card-content">
+                <h2>{{ movie.title }}</h2>
+                <p><strong>Fecha de lanzamiento:</strong></br> {{ movie.release_date }}</p>
+                <br>
+                <p><strong>Contenido:</strong></p>
+                <p>{{ movie.overview }}</p>
+
+                <div class="generes">
+                    <h3>Generos:</h3>
+                    <ul>
+                        <li v-for="genre in movie.genres">{{ genre.name }}</li>
+                    </ul>
+                </div>
+                <p><strong>Idioma:</strong> {{ movie.original_language }}</p>
+                <p><strong>Popularidad:</strong> {{ movie.popularity }}</p>
+                <p><strong>Promedio de votos:</strong> {{ movie.vote_average }}</p>
+                <p><strong>Conteo de votos:</strong> {{ movie.vote_count }}</p>
+
+                <p><strong>Rating de la pelicula:</strong></p>
+                <div class="rating-checkboxes">
+                    <label v-for="n in 10" :key="n">
+                        <input type="checkbox" :value="n" v-model="selectedRatings" @change="updateRating">
+                        {{ n }}
+                    </label>
+                </div>
+                <p>Rating seleccionado: {{ selectedRatings.join(', ') || 'Ninguno' }}</p>
+
+                <div class="button-container">
+                    <button @click="saveRating()">Guardar Rating</button>
+                    <button @click="deleteRating()">Borrar Rating</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    movieId: null,
+                    movie: {},
+                    selectedRatings: []
+                }
+            },
+            methods: {
+                getDetails(movieId) {
+                    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=1f34f8d7ed59df90cec23579d909420f`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.movie = data;
+                            this.loadRating();
+                        })
+                        .catch(error => console.error("Error:", error));
+                },
+
+                // Obtener el ID de la película
+                getMovieIdFromUrl() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('id');
+                },
+
+          
+                updateRating() {
+                    console.log("Rating seleccionado:", this.selectedRatings);
+                },
+
+            
+                saveRating() {
+                    localStorage.setItem(`rating_${this.movieId}`, JSON.stringify(this.selectedRatings));
+                    alert("Rating guardado!");
+                },
+
+            
+                loadRating() {
+                    const storedRating = localStorage.getItem(`rating_${this.movieId}`);
+                    if (storedRating) {
+                        this.selectedRatings = JSON.parse(storedRating);
+                        console.log("Rating cargado:", this.selectedRatings);
+                    }
+                },
+
+                deleteRating() {
+                    if (this.movieId) {
+                        localStorage.removeItem(`rating_${this.movieId}`);
+                        this.selectedRatings = [];
+                        console.log('Rating borrado');
+                        alert("Rating borrado!");
+                    }
+                }
+            },
+
+            // Cargar los detalles de la película al montar el componente
+            mounted() {
+                this.movieId = this.getMovieIdFromUrl();
+                if (this.movieId) {
+                    this.getDetails(this.movieId);
+                } else {
+                    console.log('No se encontró un ID de película válido.');
+                }
+            }
+        }).mount('#main')
+    </script>
+</body>
+</html>
