@@ -7,20 +7,21 @@
     <title>Pelicula</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style type="text/css">
+      
         #main {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #6196ae;
+            background-color: #9B9ECE; 
             padding: 20px;
         }
 
         .card {
-            background-color: #4852dd83;
+            background-color: #6665DD; 
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px #444b6e8a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: row;
             align-items: flex-start;
@@ -44,64 +45,46 @@
         .card-content h2 {
             margin: 0;
             font-size: 1.5rem;
+            color: #000500;
         }
 
-        .rating-checkboxes {
+        .rating-bar {
             display: flex;
             gap: 10px;
             margin: 10px 0;
+            justify-content: center;
         }
 
-        .rating-checkboxes label {
+        .rating-bar label {
             font-size: 1rem;
             cursor: pointer;
             position: relative;
+            color: #000000;
         }
 
-        .rating-checkboxes input[type="checkbox"] {
+        .rating-bar input[type="radio"] {
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             width: 20px;
             height: 20px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
+            border: 1px solid #000000;
             background-color: transparent;
             cursor: pointer;
-            position: relative;
+            border-radius: 50%;
             transition: background-color 0.2s, border-color 0.2s;
         }
 
-        .rating-checkboxes input[type="checkbox"]:checked {
-            background-color: #000000;
-            border-color: #dbe5b0;
-        }
-
-        .rating-checkboxes input[type="checkbox"]::before {
-            content: '';
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: white;
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            opacity: 0;
-            transform: scale(0);
-            transition: opacity 0.2s, transform 0.2s;
-        }
-
-        .rating-checkboxes input[type="checkbox"]:checked::before {
-            opacity: 1;
-            transform: scale(1);
+        .rating-bar input[type="radio"]:checked {
+            background-color: #473BF0;
+            border-color: #000000;
         }
 
         button {
             margin-top: 10px;
             padding: 10px;
-            
-            background-color: #7095f1;
-            color: rgb(84, 76, 89);
+            background-color: #473BF0; 
+            color: #000500; 
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -110,13 +93,18 @@
         }
 
         button:hover {
-            background-color: #4875e4;
+            background-color: #6665DD; 
         }
 
         .button-container {
             display: flex;
             justify-content: center;
             width: 100%;
+        }
+
+    
+        p, ul {
+            color: #000000; 
         }
     </style>
 </head>
@@ -134,7 +122,7 @@
                 <p>{{ movie.overview }}</p>
 
                 <div class="generes">
-                    <h3>Generos:</h3>
+                    <h3>Géneros:</h3>
                     <ul>
                         <li v-for="genre in movie.genres">{{ genre.name }}</li>
                     </ul>
@@ -144,19 +132,17 @@
                 <p><strong>Promedio de votos:</strong> {{ movie.vote_average }}</p>
                 <p><strong>Conteo de votos:</strong> {{ movie.vote_count }}</p>
 
-                <p><strong>Rating de la pelicula:</strong></p>
-                <div class="rating-checkboxes">
+                <p><strong>Rating de la película:</strong></p>
+                <div class="rating-bar">
                     <label v-for="n in 10" :key="n">
-                        <input type="checkbox" :value="n" v-model="selectedRatings" @change="updateRating">
-                        {{ n }}
+                        <input type="radio" :value="n" v-model="selectedRating" @change="updateRating"> {{ n }}
                     </label>
                 </div>
-                <p>Rating seleccionado: {{ selectedRatings.join(', ') || 'Ninguno' }}</p>
+                <p>Rating seleccionado: {{ selectedRating || 'Ninguno' }}</p>
 
                 <div class="button-container">
                     <button @click="saveRating()">Guardar Rating</button>
                     <button @click="deleteRating()">Borrar Rating</button>
-
                 </div>
             </div>
         </div>
@@ -170,7 +156,7 @@
                 return {
                     movieId: null,
                     movie: {},
-                    selectedRatings: []
+                    selectedRating: null
                 }
             },
             methods: {
@@ -185,43 +171,39 @@
                         .catch(error => console.error("Error:", error));
                 },
 
-                // Obtener el ID de la película
+              /*   id de la película */
                 getMovieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');
                 },
 
-          
                 updateRating() {
-                    console.log("Rating seleccionado:", this.selectedRatings);
+                    console.log("Rating seleccionado:", this.selectedRating);
                 },
 
-            
                 saveRating() {
-                    localStorage.setItem(`rating_${this.movieId}`, JSON.stringify(this.selectedRatings));
+                    localStorage.setItem(`rating_${this.movieId}`, this.selectedRating);
                     alert("Rating guardado!");
                 },
 
-            
                 loadRating() {
                     const storedRating = localStorage.getItem(`rating_${this.movieId}`);
                     if (storedRating) {
-                        this.selectedRatings = JSON.parse(storedRating);
-                        console.log("Rating cargado:", this.selectedRatings);
+                        this.selectedRating = storedRating;
+                        console.log("Rating cargado:", this.selectedRating);
                     }
                 },
 
                 deleteRating() {
                     if (this.movieId) {
                         localStorage.removeItem(`rating_${this.movieId}`);
-                        this.selectedRatings = [];
+                        this.selectedRating = null;
                         console.log('Rating borrado');
                         alert("Rating borrado!");
                     }
                 }
             },
 
-            // Cargar los detalles de la película al montar el componente
             mounted() {
                 this.movieId = this.getMovieIdFromUrl();
                 if (this.movieId) {
