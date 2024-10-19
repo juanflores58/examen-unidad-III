@@ -79,7 +79,7 @@
     </iframe>
 
     <div class="cast" v-if="cast.length > 0">
-        <div class="cast-card" v-for="castMember in cast" :key="castMember.id">
+        <div class="cast-card" v-for="castMember in cast" :key="castMember.id" @click="goToDetailsArtist(castMember)">
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + castMember.profile_path"
                 alt="cast member profile">
             <p><strong>{{ castMember.name }}</strong></p>
@@ -191,6 +191,10 @@
                     });
 
             },
+            goToDetailsArtist(castMember) {
+                window.location.href = `infoartista.html?id=${castMember.id}`;
+            },
+
 
             toggleSeason(seasonId) {
                 this.openSeasons = this.openSeasons === seasonId ? null : seasonId;
