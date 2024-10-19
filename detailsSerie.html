@@ -6,108 +6,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Serie</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="detailsSerieStyle.css">
 </head>
 
-<body>
-    <div id="main">
-        <div id="nav">
-            <div id="logo">
-                <img src="logo.png" alt="logo">
+<div id="main">
+    <header>
+        <div class="container">
+            <img src="logo.png" alt="Logo de Cinema" class="logo-img">
+            <div class="logo">
                 <h1>WebSite</h1>
             </div>
-            <ul id="nav-links">
-                <li><a href="HTML HOME.html">Home</a></li>
-                <li><a href="homeSerie.html">Series</a></li>
-                <li><a href="homeMovie.html">Movies</a></li>
-            </ul>
-            <div id="search-bar">
-                <input type="text" placeholder="Search...">
-                <button>Search</button>
+            <nav>
+                <ul>
+                    <li><a href="html_index_home.html">Inicio</a></li>
+                    <li><a href="#">Películas</a></li>
+                    <li><a href="homeSerie.html">Series/TV</a></li>
+                    <li><a href="#">Ver Gratis</a></li>
+                    <li><a href="#">Explorar</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button>Buscar</button>
             </div>
-            <ul id="nav-user">
-                <li><a href="login.html">Login</a></li>
-                <li><a href="singUp.html">Sing Up</a></li>
-            </ul>
+            <nav>
+                <ul>
+                    <li><a href="#">Log in</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
         </div>
-        <div class="card-serie" v-if="serieId">
-            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="serie poster">
+    </header>
+
+    <div class="card-serie" v-if="serieId">
+        <div class="card-header">
+            <div class="imagen">
+                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path"
+                    alt="serie poster">
+            </div>
+        </div>
+        <div class="card-content">
             <div class="serie-info">
                 <h2>{{ serie.name }}</h2>
                 <p>{{ serie.original_name }}</p>
                 <p>{{ serie.overview }}</p>
-                <p><strong>First Air Date:</strong> {{ serie.first_air_date }} </p>
-
-                <!-- Generos con clic para redirigir -->
-                <div class="generes">
-                    <h3>Géneros</h3>
-                    <ul>
-                        <li v-for="genre in serie.genres" :key="genre.id">
-                            <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a>
-                        </li>
-                    </ul>
-                </div>
-
+                <p><strong>First Air Date:</strong> {{ serie.first_air_date }}</p>
+            </div>
+            <div class="generes">
+                <h3>Generes</h3>
+                <ul>
+                    <li v-for="genre in serie.genres">{{ genre.name }}</li>
+                </ul>
+            </div>
+            <div class="details">
                 <p><strong>Original Language:</strong> {{ serie.original_language }}</p>
                 <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
                 <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
                 <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
+                <p><strong>Rate this movie:</strong></p>
             </div>
         </div>
     </div>
-    <script>
 
-        const app = Vue.createApp({
+    <div class="cast" v-if="cast.length > 0">
+        <div class="cast-card" v-for="castMember in cast" :key="castMember.id">
+            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + castMember.profile_path"
+                alt="cast member profile">
+            <p>{{ castMember.name }}</p>
+        </div>
+    </div>
+</div>
+<script>
 
-            data() {
-                return {
-                    serieId: null,
-                    serie: {},
-                    rating: 0
-                }
-            },
-            methods: {
-                goToDetails(serie) {
-                    console.log(`Fetching details for movie ID: ${serie.id}`);
-                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
-                    console.log('API URL:', url)
+    const app = Vue.createApp({
 
-                    fetch(url)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log(data);
-                            this.serie = data;
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                },
-                getSerieIdFromUrl() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    return urlParams.get('id');
-                },
-                goToCategory(genreId) {
-                 // Redirigi a la página de detailsCategoryel.html mami
-                     window.location.href = `detailsCategory.html?genreId=${genreId}`;
-                                        }
-            },
-            mounted() {
-                this.serieId = this.getSerieIdFromUrl();
-                console.log('Serie ID:', this.serieId);
-                if (this.serieId) {
-                    this.goToDetails(this.serieId);
-                } else {
-                    console.log('No serie ID found');
-                }
+        data() {
+            return {
+                serieId: null,
+                serie: {},
+                cast: [],
+                rating: 0
             }
+        },
+        methods: {
+            goToDetails(serie) {
+                console.log(`Fetching details for movie ID: ${serie.id}`);
+                const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                console.log('API URL:', url)
 
-        }).mount('#main')
-    </script>
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        this.serie = data;
+                        this.getCast();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            },
+            getSerieIdFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id');
+            },
+            getCast() {
+                const url = `https:api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        this.cast = data.cast;
+                    })
+                    .catch(error => {
+
+                    });
+
+            },
+            goToCategory(genreId) {
+                window.location.href = `detailsCategory.html?genreId=${genreId}`;
+            }
+        },
+        mounted() {
+            this.serieId = this.getSerieIdFromUrl();
+            console.log('Serie ID:', this.serieId);
+            if (this.serieId) {
+                this.goToDetails(this.serieId);
+            } else {
+                console.log('No serie ID found');
+            }
+        }
+
+    }).mount('#main')
+</script>
 
 </body>
 
