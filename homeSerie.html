@@ -43,7 +43,7 @@
             <h2>{{ serie.name }}</h2>
             <h3>{{ serie.first_air_date }}</h3>
         </div>
-        <h3>{{ numPage }}</h3>
+        <h3>Page: {{ numPage }}</h3>
         <button @click="changePage('previous')" :disabled="numPage === 1">Previous</button>
         <button @click="changePage('next')">Next</button>
     </div>
