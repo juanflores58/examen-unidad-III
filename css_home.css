@@ -113,24 +113,10 @@ h2 {
 }
 
 .movie-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ajustar el ancho mínimo */
-    gap: 20px;
-    padding: 20px;
-}
-
-@media (min-width: 100px) {
-    .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Aumentar columnas en pantallas grandes */
-    }
-}
-
-
-.movie-grid {
     display: flex;
-    flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias filas si es necesario */
+    flex-wrap: nowrap; /* Ajuste para que las tarjetas se alineen en una fila */
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
     gap: 20px;
-    justify-content: center; /* Centra las tarjetas horizontalmente */
     padding: 20px;
 }
 
@@ -159,6 +145,19 @@ h2 {
     color: #666;
 }
 
+/* Barra de desplazamiento horizontal personalizada */
+.movie-grid::-webkit-scrollbar {
+    height: 8px; /* Altura de la barra de desplazamiento */
+}
+
+.movie-grid::-webkit-scrollbar-thumb {
+    background-color: #ff0101; /* Color de la barra de desplazamiento */
+    border-radius: 4px;
+}
+
+.movie-grid::-webkit-scrollbar-track {
+    background-color: #1d06f0;
+}
 
 .movie-card button {
     margin: 10px 0;
@@ -177,4 +176,3 @@ footer {
     color: white;
     text-align: center;
 }
-
