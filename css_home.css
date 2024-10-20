@@ -7,13 +7,13 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #abababb0;
-    color: #dbdbe7;
+    color: #000000;
 }
 
 .container {
     width: 80%;
     margin: 0 auto;
-    display: inline-block; width: 100px; height: 50px;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -119,41 +119,46 @@ h2 {
     padding: 20px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 100px) {
     .movie-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Aumentar columnas en pantallas grandes */
     }
 }
 
 
-.movie-card {
+.movie-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias filas si es necesario */
+    gap: 20px;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    padding: 20px;
+}
+
+.card {
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    display: flex;
-    flex-direction: column; /* Asegura que el contenido dentro de la tarjeta esté alineado en columna */
-    justify-content: space-between;
-    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+    flex: 0 0 150px; /* Ajusta el ancho de las tarjetas */
 }
 
-.movie-card img {
+.card img {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 225px; /* Ajusta la altura de las imágenes */
+    object-fit: cover; /* Mantiene la proporción de la imagen, cortando si es necesario */
 }
 
-.movie-card h3 {
+.card h3 {
     margin: 10px 0;
-    font-size: 18px;
+    font-size: 16px;
 }
 
-.movie-card p {
+.card p {
     font-size: 14px;
     color: #666;
-    padding: 0 10px;
 }
+
 
 .movie-card button {
     margin: 10px 0;
