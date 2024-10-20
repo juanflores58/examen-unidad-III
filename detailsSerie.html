@@ -101,10 +101,18 @@
             </div>
         </div>
     </div>
-    <div>
 
+    <div v-if="recommendations.length > 0">
+        <h3>Recommendations</h3>
+        <div class="recommendation">
+            <div class="recommendation-card" v-for="recommendation in recommendations" :key="recommendation.id"
+                @click=" goToRecommendationDetails(recommendation.id)">
+                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + recommendation.poster_path"
+                    alt="recommendation poster">
+                <p><strong>{{ recommendation.name }}</strong></p>
+            </div>
+        </div>
     </div>
-
 </div>
 <script>
 
@@ -118,13 +126,14 @@
                 season: {},
                 openSeasons: null,
                 videoIdUrl: null,
+                recommendations: [],
                 rating: 0
             }
         },
         methods: {
             goToDetails(serie) {
                 console.log(`Fetching details for movie ID: ${serie.id}`);
-                const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
                 console.log('API URL:', url)
 
                 fetch(url)
@@ -139,6 +148,7 @@
                         this.serie = data;
                         this.getCast();
                         this.getVideos();
+                        this.getRecommendations();
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -156,7 +166,7 @@
                     redirect: "follow"
                 };
 
-                fetch(`https://api.themoviedb.org/3/tv/${this.serieId}/videos?api_key=e2f892788bdea42be5636a47bc7ffdd5`, requestOptions)
+                fetch(`https://api.themoviedb.org/3/tv/${this.serieId}/videos?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`, requestOptions)
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error('Error: ' + response.status + ' ' + response.statusText);
@@ -177,7 +187,7 @@
             },
 
             getCast() {
-                const url = `https:api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                const url = `https:api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -208,13 +218,30 @@
             },
             goToCategory(genreId) {
                 window.location.href = `detailsCategory.html?genreId=${genreId}`;
-            }
+            },
+
+            getRecommendations() {
+                const url = `https://api.themoviedb.org/3/tv/${this.serieId}/recommendations?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.recommendations = data.results;
+                        console.log("Recomendaciones:", data.results);
+                    })
+                    .catch(error => {
+                        console.error('Error obteniendo recomendaciones:', error);
+                    });
+            },
+            goToRecommendationDetails(recommendationId) {
+                window.location.href = `detailsSerie.html?id=${recommendationId}`;
+            },
         },
         mounted() {
             this.serieId = this.getSerieIdFromUrl();
             console.log('Serie ID:', this.serieId);
             if (this.serieId) {
                 this.goToDetails(this.serieId);
+                this.getRecommendations();
             } else {
                 console.log('No serie ID found');
             }
