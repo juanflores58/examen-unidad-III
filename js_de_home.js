@@ -1,73 +1,45 @@
-const API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZjE5MTEyMzZhYTkxZDlkMzdhZDJiMWE3NmJlM2M1ZCIsIm5iZiI6MTcyODk3MTMxNC4xMjM4MTcsInN1YiI6IjY3MDZiZmIwYTg4NjE0ZDZiMDhiMGYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lwlyMf7CuxWuOhyz45aDuyveXT9gWJ9EQ90n0l1YMt8';
+const API_TOKEN = 'your_api_token'; // Asegúrate de proteger tu token
 const BASE_URL = 'https://api.themoviedb.org/3';
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w1280'; // Tamaño adecuado para el banner
-const API_KEY = '0f1911236aa91d9d37ad2b1a76be3c5d'
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+const api_key = '0f1911236aa91d9d37ad2b1a76be3c5d'; // Asegúrate de proteger tu API key
 
-// Función para cargar las 5 películas más populares en el carrusel
-async function loadCarouselMovies() {
-    const data = await fetchData('/movie/popular');
-    
-    // Verifica si los datos fueron correctamente recibidos
-    if (!data || !data.results || data.results.length === 0) {
-        console.error('No se encontraron películas populares');
-        return;
-    }
-    
-    const popularMovies = data.results.slice(0, 5); // Tomar las primeras 5 películas
+async function loadBannerMovie() {
+    try {
+        const response = await fetch(`${BASE_URL}/movie/popular?api_key=${api_key}`, {
+            headers: {
+                Authorization: `Bearer ${API_TOKEN}`,
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+        });
 
-    const carouselInner = document.querySelector('.carousel-inner');
-    carouselInner.innerHTML = ''; // Limpiar el contenido previo
-
-    popularMovies.forEach((movie, index) => {
-        const activeClass = index === 0 ? 'active' : ''; 
-        const imagePath = movie.backdrop_path 
-            ? `${IMAGE_BASE_URL + movie.backdrop_path}` 
-            : `${IMAGE_BASE_URL + movie.poster_path}`;
-
-        if (imagePath) {
-            console.log('Cargando imagen:', imagePath); // Depurar URL de imagen
-            const carouselItem = `
-                <div class="carousel-item ${activeClass}">
-                    <img src="${imagePath}" alt="${movie.title}">
-                    <div class="carousel-caption">
-                        <h3>${movie.title}</h3>
-                        <p>${movie.overview}</p>
-                    </div>
-                </div>
-            `;
-            carouselInner.innerHTML += carouselItem;
-        } else {
-            console.warn(`No se encontró imagen para la película: ${movie.title}`);
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de la API');
         }
-    });
 
-    initCarousel(); // Inicializar la funcionalidad del carrusel
+        const data = await response.json();
+        const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+
+        if (!randomMovie || !randomMovie.backdrop_path) {
+            console.error('No se encontró una película válida o no tiene imagen de fondo');
+            return;
+        }
+
+        const imageUrl = `${IMAGE_BASE_URL}${randomMovie.backdrop_path}`;
+        const banner = document.getElementById('banner');
+        banner.style.backgroundImage = `url(${imageUrl})`;
+        banner.style.backgroundSize = 'cover';
+        banner.style.backgroundPosition = 'center';
+
+        document.querySelector('.banner h1').textContent = randomMovie.title;
+        document.querySelector('.banner p').textContent = randomMovie.overview;
+    } catch (error) {
+        console.error('Error al obtener la película:', error);
+        // Considera mostrar un mensaje de error al usuario
+    }
 }
 
+window.onload = loadBannerMovie;
 
-// Función para inicializar el carrusel
-function initCarousel() {
-    const carousel = document.querySelector('.carousel-inner');
-    const items = document.querySelectorAll('.carousel-item');
-    let currentIndex = 0;
-
-    // Mostrar el elemento inicial
-    items[currentIndex].classList.add('active');
-
-    // Botón siguiente
-    document.querySelector('.next').addEventListener('click', () => {
-        items[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % items.length;
-        items[currentIndex].classList.add('active');
-    });
-
-    // Botón anterior
-    document.querySelector('.prev').addEventListener('click', () => {
-        items[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        items[currentIndex].classList.add('active');
-    });
-}
 
 // Función auxiliar para hacer fetch de datos desde la API
 async function fetchData(endpoint) {
@@ -83,25 +55,6 @@ async function fetchData(endpoint) {
     } catch (error) {
         console.error('Error al obtener los datos de la API:', error);
     }
-}
-
-// Llamar a la función de carga de películas en el carrusel al cargar la página
-window.onload = () => {
-    loadCarouselMovies(); // Cargar el carrusel
-    init(); // Cargar el resto de la página
-};
-
-// Función para hacer una petición a la API
-async function fetchData(endpoint) {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${API_TOKEN}`,
-            'Content-Type': 'application/json;charset=utf-8'
-        }
-    });
-    const data = await response.json();
-    return data;
 }
 
 // Función para mostrar las películas en la sección correspondiente
@@ -146,6 +99,7 @@ async function getFreeMovies() {
 
 // Inicializar la página cargando los datos
 function init() {
+    loadBanner(); // Cargar la imagen del banner
     getTrendingMovies();
     getPopularMovies();
     getPopularTVShows();
@@ -154,3 +108,20 @@ function init() {
 
 // Llamar a la función para inicializar cuando la página cargue
 window.onload = init;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//'0f1911236aa91d9d37ad2b1a76be3c5d'
