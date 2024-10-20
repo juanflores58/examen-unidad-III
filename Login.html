@@ -217,6 +217,7 @@
                                 .then(result => {
                                     if (result.success) {
                                         alert('Inicio de sesión exitoso!');
+                                        window.localStorage("user_token", response.request_token);
                                         window.location.href = "detailsMovie.html";
                                     } else {
                                         this.loginError = 'Error de autenticación. Intenta nuevamente.';
