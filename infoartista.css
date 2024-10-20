@@ -1,134 +1,18 @@
-/* Header styles */
-header {
-    background-color: #04111c;
-    padding: 15px 0;
-    color: white;
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo-img {
-    width: 150px;
-    height: auto;
-    margin-right: 10px;
-  }
-  
-  .logo h1 {
-    font-size: 24px;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    margin-left: auto;
-  }
-  
-  nav ul li {
-    margin-left: 20px;
-  }
-  
-  nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  .search-bar {
-    display: flex;
-    margin-left: 20px;
-  }
-  
-  .search-bar input {
-    padding: 5px;
-    font-size: 16px;
-  }
-  
-  .search-bar button {
-    padding: 5px 10px;
-    background-color: #344966;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  /* Left column: Personal info */
-  .personal-info {
-    background-color: white;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-  }
-  
-  .profile-pic {
-    width: 100%;
-    border-radius: 0.5rem;
-  }
-  
-  .name {
-    margin-top: 1rem;
-    font-size: 2rem;
-    font-weight: bold;
-  }
-  
-  .bio-label {
-    color: #4B5563;
-    margin-top: 0.5rem;
-  }
-  
-  .bio-text {
-    margin-top: 1rem;
-  }
-  
-  .personal-details {
-    margin-top: 1.5rem;
-  }
-  
-  .info-list {
-    margin-top: 0.5rem;
-    list-style-type: none;
-    padding: 0;
-    color: #374151;
-  }
-  
-  .edit-button {
-    margin-top: 1rem;
-    background-color: #3B82F6;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .edit-button:hover {
-    background-color: #2563EB;
-  }
-  
-  /* Right column: Known for & Acting */
-  .known-for, .acting {
-    background-color: white;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .acting-role {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #E5E7EB;
-    padding: 1rem 0;
-  }
-  
-  .title {
-    font-size: 1.25rem;
-    font-weight: 500;
-  }
-  
-  .details, .department {
-    color: #6B7280;
-  }
-  
+.profile-pic {
+  width: 200px;
+  border-radius: 10px;
+}
+
+.known-for {
+  display: flex;
+  gap: 15px;
+}
+
+.poster {
+  width: 100px;
+  border-radius: 5px;
+}
+
+.filmography {
+  margin-top: 20px;
+}
