@@ -7,18 +7,18 @@
     <title>Pelicula</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style type="text/css">
-   
+      
         #main {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #C1BDDB; 
+            background-color: #9B9ECE; 
             padding: 20px;
         }
 
         .card {
-            background-color: #5D5D81;
+            background-color: #6665DD; 
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -45,7 +45,7 @@
         .card-content h2 {
             margin: 0;
             font-size: 1.5rem;
-            color: #04111c; 
+            color: #000500;
         }
 
         .rating-bar {
@@ -59,7 +59,7 @@
             font-size: 1rem;
             cursor: pointer;
             position: relative;
-            color: #04111c; 
+            color: #000000;
         }
 
         .rating-bar input[type="radio"] {
@@ -68,7 +68,7 @@
             -moz-appearance: none;
             width: 20px;
             height: 20px;
-            border: 1px solid #04111c;
+            border: 1px solid #000000;
             background-color: transparent;
             cursor: pointer;
             border-radius: 50%;
@@ -76,15 +76,15 @@
         }
 
         .rating-bar input[type="radio"]:checked {
-            background-color: #3B3355; 
-            border-color: #04111c;
+            background-color: #473BF0;
+            border-color: #000000;
         }
 
         button {
             margin-top: 10px;
             padding: 10px;
-            background-color: #3B3355; 
-            color: #C1BDDB; 
+            background-color: #473BF0; 
+            color: #000500; 
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -93,7 +93,7 @@
         }
 
         button:hover {
-            background-color: #5D5D81; 
+            background-color: #6665DD; 
         }
 
         .button-container {
@@ -115,7 +115,7 @@
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
             <div class="card-content">
                 <h2>{{ movie.title }}</h2>
-                <p><strong>Fecha de lanzamiento:</strong><br> {{ movie.release_date }}</p>
+                <p><strong>Fecha de lanzamiento:</strong></br> {{ movie.release_date }}</p>
                 <br>
                 <p><strong>Contenido:</strong></p>
                 <p>{{ movie.overview }}</p>
@@ -159,8 +159,9 @@
                 }
             },
             methods: {
+           
                 getDetails(movieId) {
-                    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=1f34f8d7ed59df90cec23579d909420f`;
+                    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
@@ -170,36 +171,66 @@
                         .catch(error => console.error("Error:", error));
                 },
 
-                // Obtener el ID de la película
+               
                 getMovieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');
                 },
 
-                updateRating() {
-                    console.log("Rating seleccionado:", this.selectedRating);
-                },
-
+            
                 saveRating() {
-                    localStorage.setItem(`rating_${this.movieId}`, this.selectedRating);
-                    alert("Rating guardado!");
+                    const url = 'https://api.themoviedb.org/3//movie/116/rating?session_id';
+                    const payload = {
+                        movieId: this.movieId,
+                        rating: this.selectedRating
+                    };
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error al guardar el rating.');
+                            }
+                            alert('Rating guardado exitosamente!');
+                        })
+                        .catch(error => {
+                            console.error('Error al guardar el rating:', error);
+                        });
                 },
 
+            
                 loadRating() {
-                    const storedRating = localStorage.getItem(`rating_${this.movieId}`);
-                    if (storedRating) {
-                        this.selectedRating = storedRating;
-                        console.log("Rating cargado:", this.selectedRating);
-                    }
+                    const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.selectedRating = data.rating || null;
+                        })
+                        .catch(error => console.error('Error al cargar el rating:', error));
                 },
 
                 deleteRating() {
-                    if (this.movieId) {
-                        localStorage.removeItem(`rating_${this.movieId}`);
-                        this.selectedRating = null;
-                        console.log('Rating borrado');
-                        alert("Rating borrado!");
-                    }
+                    const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`; 
+                    fetch(url, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error al borrar el rating.');
+                            }
+                            this.selectedRating = null;
+                            alert('Rating borrado exitosamente!');
+                        })
+                        .catch(error => console.error('Error al borrar el rating:', error));
+                },
+
+                updateRating() {
+                    console.log("Rating seleccionado:", this.selectedRating);
                 }
             },
 
@@ -214,4 +245,5 @@
         }).mount('#main')
     </script>
 </body>
+
 </html>
