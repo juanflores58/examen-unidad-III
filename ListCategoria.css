@@ -13,19 +13,16 @@ header .container {
     background-color: #333;
 }
 
-
 .logo-img {
     width: 150px;
     height: auto;
     margin-right: 10px;
 }
 
-
 .logo h1 {
     color: #fff;
     margin-left: 10px;
 }
-
 
 .main-nav ul {
     display: flex;
@@ -43,7 +40,6 @@ header .container {
     text-decoration: none;
     font-weight: bold;
 }
-
 
 .search-bar {
     display: flex;
@@ -135,63 +131,51 @@ header {
     color: #fff;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+  }
 
-#app {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
+  .dropdown button {
+    background-color: #444;
+    border: 1px solid #000000;
+    padding: 8px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
 
-#app h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #282c34;
-}
+  .dropdown button:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
 
-#app ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    list-style: none;
-}
-
-#app li {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-    overflow: hidden;
-}
-
-#app li:hover {
-    transform: translateY(-5px);
-}
-
-#app li img {
-    width: 100%;
-    height: auto;
-    border-bottom: 2px solid #ddd;
-}
-
-#app li div {
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 10px;
-}
+    z-index: 1;
+  }
 
-#app li h3 {
-    font-size: 18px;
-    color: #282c34;
-    margin-bottom: 10px;
-}
-
-#app li p {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-#app a {
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
     text-decoration: none;
-    color: #282c34;
     display: block;
-    
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  hr {
+    margin-bottom: 10px;
+    color: #000000;
 }
