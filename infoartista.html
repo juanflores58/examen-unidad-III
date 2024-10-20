@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Películas - Examen Unidad 3</title>
-    <link rel="stylesheet" href="css_home.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil de Kathryn Hahn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3.2.45/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="infoartista.css">
 </head>
-
-<body>
-    <!-- Encabezado -->
+<body class="bg-gray-100">
+  <div id="app" class="max-w-7xl mx-auto py-10">
+    <!-- Header -->
     <header>
-        <div class="container">
+
             <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
             <div class="logo">
-                <h1>CINEMA c:</h1>
+                <h1>WebSite</h1>
             </div>
             <nav>
                 <ul>
@@ -36,16 +37,90 @@
                     <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
-        </div>
-    </header>
-
-
-    <DIv class="container">
-
-
-    </DIv>
-
-</body>
-
-</html>
         
+    </header>
+    <!-- Main content -->
+    <div class="grid grid-cols-3 gap-8 mt-8">
+      <!-- Left column: Personal info -->
+      <aside class="col-span-1 personal-info">
+        <img class="profile-pic" src="https://placehold.co/400x600" alt="Foto de Kathryn Hahn">
+        <h1 class="name">Kathryn Hahn</h1>
+        <p class="bio-label">Biografía</p>
+        <p class="bio-text">
+          Kathryn Marie Hahn (born July 23, 1973) is an American actress and comedian. 
+          She began her career on television, starring as grief counselor Lily Lebowski...
+        </p>
+
+        <div class="personal-details">
+          <h2>Información personal</h2>
+          <ul class="info-list">
+            <li><strong>Conocido por:</strong> Actuando</li>
+            <li><strong>Créditos conocidos:</strong> 95</li>
+            <li><strong>Sexo:</strong> Mujer</li>
+            <li><strong>Cumpleaños:</strong> 23 Julio 1973 (51 años)</li>
+            <li><strong>Lugar de Nacimiento:</strong> Winchester, Illinois, USA</li>
+            <li><strong>También Conocido Como:</strong> Kathryn Marie Hahn</li>
+            <li><strong>Calificación del contenido:</strong> 100</li>
+          </ul>
+          <button class="edit-button">Editar Página</button>
+        </div>
+      </aside>
+
+      <!-- Right column: Known for & Acting -->
+      <main class="col-span-2">
+        <!-- Known For section -->
+        <section class="known-for">
+          <h2>Conocido por</h2>
+          <div class="grid grid-cols-6 gap-4">
+            <div v-for="movie in movies" :key="movie.id" class="text-center">
+              <img class="w-full rounded-lg" :src="movie.image" alt="Imagen de película">
+              <p class="mt-2 text-sm">{{ movie.title }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Acting section -->
+        <section class="acting">
+          <h2>Actuando</h2>
+          <ul>
+            <li v-for="item in actingRoles" :key="item.id" class="acting-role">
+              <div>
+                <p class="title">{{ item.title }}</p>
+                <p class="details">{{ item.year }} - {{ item.role }}</p>
+              </div>
+              <span class="department">{{ item.department }}</span>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          movies: [
+            { id: 1, title: 'WandaVision', image: 'https://placehold.co/150x225' },
+            { id: 2, title: 'Glass Onion: Un misterio de Knives Out', image: 'https://placehold.co/150x225' },
+            { id: 3, title: 'El Club de Las Madres Rebeldes', image: 'https://placehold.co/150x225' },
+            { id: 4, title: 'Spider-Man: Un Nuevo Universo', image: 'https://placehold.co/150x225' },
+            { id: 5, title: 'Cómo Perder a Un Hombre en 10 Días', image: 'https://placehold.co/150x225' },
+            { id: 6, title: 'Quién *&$%! son los Miller?', image: 'https://placehold.co/150x225' }
+          ],
+          actingRoles: [
+            { id: 1, title: 'The Studio', year: '2024', role: 'Gorgeous', department: 'TV' },
+            { id: 2, title: 'Agatha en todas partes', year: '2024', role: 'Agnes O\'Connor / Agatha Harkness', department: 'TV' },
+            { id: 3, title: 'Spider-Man: A través del Spider-Verso', year: '2024', role: 'Doc Ock (voice)', department: 'Película' },
+            { id: 4, title: 'Pequeñas cosas hermosas', year: '2023', role: 'Claire Pierce', department: 'TV' },
+            { id: 5, title: 'Glass Onion: Un misterio de Knives Out', year: '2022', role: 'Claire Debella', department: 'Película' },
+            { id: 6, title: 'Hotel Transylvania 4: Transformanía', year: '2022', role: 'Ericka Van Helsing (voice)', department: 'Película' }
+          ]
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
