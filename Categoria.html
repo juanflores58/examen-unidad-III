@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinema - Categoria</title>
+    <title>Cinema - Categoría</title>
     <link rel="stylesheet" href="Categoria.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -36,26 +36,48 @@
     </header>
 
     <div id="app">
-        <h2>Películas en la categoría: {{ categoriaNombre }}</h2>
+        <h2>Películas y series en la categoría: {{ categoriaNombre }}</h2>
+
+        <div class="dropdown">
+            <label for="filter">Filtrar por:</label>
+            <select id="filter" v-model="selectedType" @change="filterResults">
+                <option value="all">Todo</option>
+                <option value="movie">Películas</option>
+                <option value="tv">Series</option>
+            </select>
+        </div>
+
+        <div class="dropdown">
+            <label for="order">Ordenar por:</label>
+            <select id="order" v-model="selectedOrder" @change="orderResults">
+                <option value="desc">Popularidad (Descendente)</option>
+                <option value="asc">Popularidad (Ascendente)</option>
+            </select>
+        </div>
+
         <ul>
-            <li v-for="pelicula in peliculas" :key="pelicula.id">
-                <img :src="'https://image.tmdb.org/t/p/w500' + pelicula.poster_path" alt="Poster de {{ pelicula.title }}" v-if="pelicula.poster_path">
+            <li v-for="item in filteredResults" :key="item.id">
+                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Poster de {{ item.title || item.name }}" v-if="item.poster_path">
                 <div>
-                    <h3>{{ pelicula.title }}</h3>
-                    <p>{{ pelicula.overview }}</p>
+                    <h3>{{ item.title || item.name }}</h3>
+                    <p>{{ item.overview }}</p>
                 </div>
             </li>
         </ul>
     </div>
+
     <script>
-      const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
+        const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
 
         const app = Vue.createApp({
             data() {
                 return {
-                    peliculas: [],
+                    peliculas: [], 
+                    filteredResults: [], 
                     categoriaNombre: '',
-                    categoriaId: null
+                    categoriaId: null,
+                    selectedType: 'all', 
+                    selectedOrder: 'desc' 
                 };
             },
             created() {
@@ -68,24 +90,53 @@
             methods: {
                 async fetchPeliculas() {
                     try {
-                        const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${this.categoriaId}`);
-                        const data = await response.json();
-                        this.peliculas = data.results;
+                        const [moviesResponse, tvResponse] = await Promise.all([
+                            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${this.categoriaId}`).then(res => res.json()),
+                            fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=es-ES&with_genres=${this.categoriaId}`).then(res => res.json())
+                        ]);
+
+                        const movies = moviesResponse.results.map(item => ({ ...item, media_type: 'movie' }));
+                        const tvShows = tvResponse.results.map(item => ({ ...item, media_type: 'tv' }));
+
+
+                        this.peliculas = [...movies, ...tvShows];
+                        this.filteredResults = this.peliculas; //mostrar todo
                         
+   
                         const genreResponse = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
                         const genreData = await genreResponse.json();
                         const selectedGenre = genreData.genres.find(genre => genre.id == this.categoriaId);
                         this.categoriaNombre = selectedGenre ? selectedGenre.name : 'Desconocido';
+
+                        this.filterResults();
+                        this.orderResults();
                     } catch (error) {
-                        console.error('Error al obtener las películas:', error);
+                        console.error('Error al obtener las películas y series:', error);
+                    }
+                },
+                filterResults() {
+                    console.log("Aplicando filtro:", this.selectedType); 
+                    if (this.selectedType === 'all') {
+                        this.filteredResults = this.peliculas;
+                    } else if (this.selectedType === 'movie') {
+                        this.filteredResults = this.peliculas.filter(item => item.media_type === 'movie');
+                    } else if (this.selectedType === 'tv') {
+                        this.filteredResults = this.peliculas.filter(item => item.media_type === 'tv');
+                    }
+                    this.orderResults(); 
+                },
+                orderResults() {
+                    console.log("Aplicando orden:", this.selectedOrder); 
+                    if (this.selectedOrder === 'desc') {
+                        this.filteredResults.sort((a, b) => b.popularity - a.popularity); 
+                    } else if (this.selectedOrder === 'asc') {
+                        this.filteredResults.sort((a, b) => a.popularity - b.popularity); 
                     }
                 }
             }
         });
-        //menudo popurri de codigo (╯°□°）╯︵ ┻━┻ -
 
         app.mount('#app');
-
     </script>
 
 </body>

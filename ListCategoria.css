@@ -10,7 +10,7 @@ header .container {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #333;
+    background-color: #04111c;
 }
 
 .logo-img {
@@ -81,7 +81,7 @@ header .container {
 }
 
 header {
-    background-color: #333;
+    background-color: #04111c;
     color: white;
     padding: 10px;
 }

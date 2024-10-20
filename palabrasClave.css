@@ -10,7 +10,7 @@ header .container {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #333;
+    background-color: #04111c;
 }
 
 
@@ -85,7 +85,7 @@ header .container {
 }
 
 header {
-    background-color: #333;
+    background-color: #04111c;
     color: white;
     padding: 10px;
 }
@@ -148,4 +148,45 @@ header {
     text-decoration: none;
     color: #282c34;
     display: block;
+}
+
+/* Diseño del contenedor del dropdown */
+.dropdown {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* dropdown v*/
+.dropdown label {
+    font-size: 18px;
+    color: #333;
+    margin-right: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+.dropdown select {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Arial', sans-serif;
+}
+
+
+.dropdown select:hover {
+    border-color: #888;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.dropdown select:focus {
+    border-color: #555;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    outline: none;
 }

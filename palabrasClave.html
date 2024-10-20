@@ -36,23 +36,40 @@
         </div>
     </header>
 
-    <div id="app">
-        <h2>Resultados para "{{ keywordName }}"</h2>
-        <ul>
-            <li v-for="movie in movies" :key="movie.id">
-                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="movie.title">
-                <div>
-                    <h3>{{ movie.title || movie.name }}</h3>
-                    <p>{{ movie.overview }}</p>
-                </div>
-            </li>
-        </ul>
+   <div id="app">
+    <h2>Resultados para "{{ keywordName }}"</h2>
+
+    <div class="dropdown">
+        <label for="filter">Filtrar por:</label>
+        <select id="filter" v-model="selectedType" @change="filterResults">
+            <option value="all">Todo</option>
+            <option value="movie">Películas</option>
+            <option value="tv">Series</option>
+        </select>
     </div>
 
+    <div class="dropdown">
+        <label for="order">Ordenar por:</label>
+        <select id="order" v-model="selectedOrder" @change="orderResults">
+            <option value="desc">Popularidad (Descendente)</option>
+            <option value="asc">Popularidad (Ascendente)</option>
+        </select>
+    </div>
+
+    <ul>
+        <li v-for="item in filteredResults" :key="item.id">
+            <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="item.title || item.name">
+            <div>
+                <h3>{{ item.title || item.name }}</h3>
+                <p>{{ item.overview }}</p>
+            </div>
+        </li>
+    </ul>
+</div>
     
 
     <script>
-        const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
+            const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
 
             if (document.getElementById('app')) {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -62,7 +79,10 @@
                     data() {
                         return {
                             keywordName: '',
-                            movies: []
+                            allResults: [], 
+                            filteredResults: [], 
+                            selectedType: 'all', 
+                            selectedOrder: 'desc' 
                         };
                     },
                     created() {
@@ -70,19 +90,51 @@
                             .then(response => response.json())
                             .then(data => {
                                 this.keywordName = data.name;
-                                return fetch(`https://api.themoviedb.org/3/keyword/${keywordId}/movies?api_key=${apiKey}`);
+                                
+                                return Promise.all([
+                                    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_keywords=${keywordId}&language=es-ES`).then(res => res.json()),
+                                    fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_keywords=${keywordId}&language=es-ES`).then(res => res.json())
+                                ]);
                             })
-                            .then(response => response.json())
-                            .then(data => {
-                                this.movies = data.results;
+                            .then(([moviesData, tvData]) => {
+                                if (moviesData && moviesData.results) {
+                                    moviesData.results.forEach(item => item.media_type = 'movie');
+                                }
+                                if (tvData && tvData.results) {
+                                    tvData.results.forEach(item => item.media_type = 'tv'); 
+                                }
+
+                                this.allResults = [...moviesData.results, ...tvData.results];
+                                this.filterResults(); 
+                                this.orderResults(); 
                             })
                             .catch(error => console.error('Error al cargar datos:', error));
+                    },
+                    methods: {
+                        filterResults() {
+                            if (this.selectedType === 'all') {
+                                this.filteredResults = this.allResults; // Mostrar todo
+                            } else if (this.selectedType === 'movie') {
+                                this.filteredResults = this.allResults.filter(item => item.media_type === 'movie'); 
+                            } else if (this.selectedType === 'tv') {
+                                this.filteredResults = this.allResults.filter(item => item.media_type === 'tv'); 
+                            }
+                            this.orderResults(); 
+                        },
+                        orderResults() {
+                            if (this.selectedOrder === 'desc') {
+                                this.filteredResults.sort((a, b) => b.popularity - a.popularity); 
+                            } else if (this.selectedOrder === 'asc') {
+                                this.filteredResults.sort((a, b) => a.popularity - b.popularity); 
+                            }
+                        }
                     }
                 });
+
                 app.mount('#app');
             }
 
-            //el que hizo este codigo estuvo al borde del prolapso pero lo termino (づ｡◕‿‿◕｡)づ 
+
     </script>
 
 
