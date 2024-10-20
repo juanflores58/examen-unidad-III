@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episodes List</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="seasonEpisodesStyle.css">
+</head>
+
+<body>
+    <div id="main">
+        <h1>Season {{ seasonNumber }}: Episodes</h1>
+        <div v-if="episodes.length > 0">
+            <ul>
+                <li v-for="episode in episodes" :key="episode.id">
+                    <h3>Episode {{ episode.episode_number }}: {{ episode.name }}</h3>
+                    <p><strong>Air Date:</strong> {{ episode.air_date }}</p>
+                    <p><strong>Overview:</strong> {{ episode.overview }}</p>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
+            <p>No episodes found for this season.</p>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    serieId: null,
+                    seasonNumber: null,
+                    episodes: []
+                }
+            },
+            methods: {
+                fetchEpisodes() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/season/${this.seasonNumber}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            this.episodes = data.episodes;
+                            console.log("Episodes:", data.episodes);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching episodes:', error);
+                        });
+                },
+                getParamsFromUrl() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.serieId = urlParams.get('serieId');
+                    this.seasonNumber = urlParams.get('seasonNumber');
+                }
+            },
+            mounted() {
+                this.getParamsFromUrl();
+                if (this.serieId && this.seasonNumber) {
+                    this.fetchEpisodes();
+                } else {
+                    console.log('Missing serieId or seasonNumber in URL');
+                }
+            }
+        }).mount('#main');
+    </script>
+</body>
+
+</html>

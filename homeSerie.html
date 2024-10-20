@@ -43,32 +43,32 @@
             <h2>{{ serie.name }}</h2>
             <h3>{{ serie.first_air_date }}</h3>
         </div>
-        <h3>Page: {{ numPage }}</h3>
-        <button @click="changePage('previous')" :disabled="numPage === 1">Previous</button>
-        <button @click="changePage('next')">Next</button>
+        <h2>Page: {{ numPage }} </h2>
+        <button @click="changeSeries('previous')" :disabled="numPage === 1">Previous</button>
+        <button @click="changeSeries('next')">Next</button>
     </div>
 
 
     <script>
-        const { createApp } = Vue;
 
+        let numPage = 1;
+        const { createApp, ref } = Vue;
         createApp({
             data() {
                 return {
                     series: [],
-                    numPage: 1,
-                    totalPages: 1,
-                };
+                    viewport: 'series',
+                    numPage: 1
+                }
             },
             methods: {
                 getSeries(page = 1) {
-                    const url = `https://api.themoviedb.org/3/discover/tv?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&page=${page}`;
-                    console.log("Fetching URL:", url);
-
+                    const url = `https://api.themoviedb.org/3/discover/tv?api_key=e2f892788bdea42be5636a47bc7ffdd5&page=${page}`;
+                    console.log('API URL:', url)
                     fetch(url)
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
                             }
                             return response.json();
                         })
@@ -88,13 +88,29 @@
                     }
                     this.getSeries(this.numPage);
                 },
-                goToDetails(serie) {
-                    const serieId = serie.id;
-                    window.location.href = `detailsSerie.html?id=${serieId}`;
+                changeSeries(direction) {
+                    console.log('Cambiando página:', direction);
+                    if (direction === 'next') {
+                        this.numPage++;
+                    } else if (direction === 'previous' && this.numPage > 1) {
+                        this.numPage--;
+                    }
+                    this.getSeries(this.numPage);
                 },
+
+                goToDetails(serie) {
+                    console.log(serie, "hola");
+                    const serieId = serie.id;
+                    window.location.href = window.location.href = `detailsSerie.html?id=${serieId}`
+
+                },
+
+
+
             },
             mounted() {
-                this.getSeries();
+                console.log('App mounted')
+                this.getSeries(this.numPage);
             }
         }).mount('#main-serie');
     </script>

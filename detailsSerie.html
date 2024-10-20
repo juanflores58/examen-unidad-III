@@ -24,7 +24,7 @@
             <nav>
                 <ul>
                     <li><a href="html_index_home.html">Inicio</a></li>
-                    <li><a href="#">Películas</a></li>
+                    <li><a href="detailsMovie.html">Películas</a></li>
                     <li><a href="homeSerie.html">Series/TV</a></li>
                     <li><a href="#">Ver Gratis</a></li>
                     <li><a href="#">Explorar</a></li>
@@ -85,6 +85,8 @@
             <p><strong>{{ castMember.name }}</strong></p>
         </div>
     </div>
+
+
     <div class="accordion" id="accordion">
         <h3>Seasons</h3>
         <div class="accordion-item" v-for="season in serie.seasons" :key="season.id">
@@ -97,10 +99,14 @@
                 <div class="accordion-body">
                     <p><strong>Air Date:</strong> {{ season.air_date }}</p>
                     <p><strong>Episode Count:</strong> {{ season.episode_count }}</p>
+                    <a :href="'seasonEpisodes.html?serieId=' + serie.id + '&seasonNumber=' + season.season_number">
+                        Lista de episodios
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div v-if="recommendations.length > 0">
         <h3>Recommendations</h3>
@@ -125,9 +131,9 @@
                 cast: [],
                 season: {},
                 openSeasons: null,
+                rating: 0,
                 videoIdUrl: null,
                 recommendations: [],
-                rating: 0
             }
         },
         methods: {
@@ -160,6 +166,7 @@
                 return urlParams.get('id');
             },
 
+
             getVideos() {
                 const requestOptions = {
                     method: "GET",
@@ -187,7 +194,7 @@
             },
 
             getCast() {
-                const url = `https:api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                const url = `https://api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -208,10 +215,8 @@
                 window.location.href = `infoartista.html?id=${castMember.id}`;
             },
 
-
             toggleSeason(seasonId) {
                 this.openSeasons = this.openSeasons === seasonId ? null : seasonId;
-
             },
             isOpen(seasonId) {
                 return this.openSeasons === seasonId;
@@ -236,6 +241,7 @@
                 window.location.href = `detailsSerie.html?id=${recommendationId}`;
             },
         },
+
         mounted() {
             this.serieId = this.getSerieIdFromUrl();
             console.log('Serie ID:', this.serieId);
@@ -245,6 +251,7 @@
             } else {
                 console.log('No serie ID found');
             }
+
         }
 
     }).mount('#main')
