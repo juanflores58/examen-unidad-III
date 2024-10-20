@@ -7,18 +7,18 @@
     <title>Pelicula</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style type="text/css">
-      
+   
         #main {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #9B9ECE; 
+            background-color: #C1BDDB; 
             padding: 20px;
         }
 
         .card {
-            background-color: #6665DD; 
+            background-color: #5D5D81;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -45,7 +45,7 @@
         .card-content h2 {
             margin: 0;
             font-size: 1.5rem;
-            color: #000500;
+            color: #04111c; 
         }
 
         .rating-bar {
@@ -59,7 +59,7 @@
             font-size: 1rem;
             cursor: pointer;
             position: relative;
-            color: #000000;
+            color: #04111c; 
         }
 
         .rating-bar input[type="radio"] {
@@ -68,7 +68,7 @@
             -moz-appearance: none;
             width: 20px;
             height: 20px;
-            border: 1px solid #000000;
+            border: 1px solid #04111c;
             background-color: transparent;
             cursor: pointer;
             border-radius: 50%;
@@ -76,15 +76,15 @@
         }
 
         .rating-bar input[type="radio"]:checked {
-            background-color: #473BF0;
-            border-color: #000000;
+            background-color: #3B3355; 
+            border-color: #04111c;
         }
 
         button {
             margin-top: 10px;
             padding: 10px;
-            background-color: #473BF0; 
-            color: #000500; 
+            background-color: #3B3355; 
+            color: #C1BDDB; 
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -93,7 +93,7 @@
         }
 
         button:hover {
-            background-color: #6665DD; 
+            background-color: #5D5D81; 
         }
 
         .button-container {
@@ -102,7 +102,6 @@
             width: 100%;
         }
 
-    
         p, ul {
             color: #000000; 
         }
@@ -116,7 +115,7 @@
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
             <div class="card-content">
                 <h2>{{ movie.title }}</h2>
-                <p><strong>Fecha de lanzamiento:</strong></br> {{ movie.release_date }}</p>
+                <p><strong>Fecha de lanzamiento:</strong><br> {{ movie.release_date }}</p>
                 <br>
                 <p><strong>Contenido:</strong></p>
                 <p>{{ movie.overview }}</p>
@@ -171,7 +170,7 @@
                         .catch(error => console.error("Error:", error));
                 },
 
-              /*   id de la película */
+                // Obtener el ID de la película
                 getMovieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');

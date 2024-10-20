@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema - Palabras Clave</title>
+    <link rel="stylesheet" href="ListCategoria.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script defer src="main.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
+            <div class="logo">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="html_index_home.html">Inicio</a></li>
+                    <li><a href="#">Películas</a></li>
+                    <li><a href="homeSerie.html">Series/TV</a></li>
+                    <li><a href="#">Ver Gratis</a></li>
+                    <li><a href="#">Explorar</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button>Buscar</button>
+            </div>
+            <nav class="user-nav">
+                <ul>
+                    <li><a href="Login.html">Log in</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="app">
+        <h2>Palabras Clave</h2>
+        <ul>
+            <li v-for="keyword in keywords" :key="keyword.id">
+                <a :href="'palabrasClave.html?id=' + keyword.id">{{ keyword.name }}</a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
+    <script>
+
+const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
+
+    if (document.getElementById('app')) {
+        const app = Vue.createApp({
+            data() {
+                return {
+                    keywords: []
+                };
+            },
+            created() {
+                fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=es-ES`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Para cada película, buscamos sus palabras clave
+                        const keywordPromises = data.results.map(movie => {
+                            return fetch(`https://api.themoviedb.org/3/movie/${movie.id}/keywords?api_key=${apiKey}`)
+                                .then(response => response.json())
+                                .then(keywordData => keywordData.keywords);
+                        });
+
+                        Promise.all(keywordPromises).then(keywordsArray => {
+                            this.keywords = keywordsArray.flat();
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener palabras clave:', error));
+            }
+        });
+        app.mount('#app');
+    }
+
+
+    </script>
+</body>
+</html>

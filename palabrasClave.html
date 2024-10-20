@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema - Palabra Clave</title>
+    <link rel="stylesheet" href="palabrasClave.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script defer src="main.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
+            <div class="logo">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="html_index_home.html">Inicio</a></li>
+                    <li><a href="#">Películas</a></li>
+                    <li><a href="homeSerie.html">Series/TV</a></li>
+                    <li><a href="#">Ver Gratis</a></li>
+                    <li><a href="#">Explorar</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button>Buscar</button>
+            </div>
+            <nav class="user-nav">
+                <ul>
+                    <li><a href="Login.html">Log in</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="app">
+        <h2>Resultados para "{{ keywordName }}"</h2>
+        <ul>
+            <li v-for="movie in movies" :key="movie.id">
+                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="movie.title">
+                <div>
+                    <h3>{{ movie.title || movie.name }}</h3>
+                    <p>{{ movie.overview }}</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    
+
+    <script>
+        const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
+
+            if (document.getElementById('app')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const keywordId = urlParams.get('id');
+
+                const app = Vue.createApp({
+                    data() {
+                        return {
+                            keywordName: '',
+                            movies: []
+                        };
+                    },
+                    created() {
+                        fetch(`https://api.themoviedb.org/3/keyword/${keywordId}?api_key=${apiKey}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.keywordName = data.name;
+                                return fetch(`https://api.themoviedb.org/3/keyword/${keywordId}/movies?api_key=${apiKey}`);
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                this.movies = data.results;
+                            })
+                            .catch(error => console.error('Error al cargar datos:', error));
+                    }
+                });
+                app.mount('#app');
+            }
+
+            //el que hizo este codigo estuvo al borde del prolapso pero lo termino (づ｡◕‿‿◕｡)づ 
+    </script>
+
+
+</body>
+</html>
