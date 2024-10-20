@@ -175,3 +175,22 @@ button:disabled {
   color: #666;
   cursor: not-allowed;
 }
+
+
+.banner {
+  background-size: cover;
+  background-position: center;
+  padding: 50px 20px;
+  color: white;
+  text-align: center;
+  height: 400px; /* Ajusta la altura del banner según necesites */
+}
+
+.banner-content h2 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.banner-content p {
+  font-size: 1.2em;
+}
