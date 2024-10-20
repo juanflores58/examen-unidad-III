@@ -162,7 +162,7 @@
             <div class="flip-card__front">
                 <div class="title">Bienvenido!</div>
                 <form @submit.prevent="login" class="flip-card__form">
-                    <input type="email" placeholder="Correo Electrónico" class="flip-card__input" v-model="loginEmail">
+                    <input type="text" placeholder="Correo Electrónico" class="flip-card__input" v-model="loginEmail">
                     <input type="password" placeholder="Contraseña" class="flip-card__input" v-model="loginPassword">
                     <button type="submit" class="flip-card__btn">Ingresar</button>
                     <p v-if="loginError" class="notification is-danger">{{ loginError }}</p>
@@ -183,11 +183,51 @@
                 login() {
                     if (!this.loginEmail || !this.loginPassword) {
                         this.loginError = 'Por favor, completa todos los campos.';
-                    } else {
-                        alert('Inicio de sesión exitoso!');
-                        window.location.href = "detailsMovie.html";
-                        this.loginError = '';
+                        return;
                     }
+
+                    const requestNewtoken = {
+                        method: "GET",
+                        redirect: "follow"
+                    };
+
+                    fetch("https://api.themoviedb.org/3/authentication/token/new?api_key=1f34f8d7ed59df90cec23579d909420f", requestNewtoken)
+                        .then((response) => response.json())
+                        .then((result) => {
+                            console.log(result)
+                            const myHeaders = new Headers();
+                            myHeaders.append("Content-Type", "application/json");
+                            myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZjM0ZjhkN2VkNTlkZjkwY2VjMjM1NzlkOTA5NDIwZiIsIm5iZiI6MTcyODUzMTY5NS41MjI5OTUsInN1YiI6IjY3MDc0YThmNjcxODAxMmZjMjMzNzc2MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.U_ztCU4JASczPu8QaHTTbMLXXh7uDbpXxQ0PM9Yn-xg");
+
+                            const raw = JSON.stringify({
+                                "username": this.loginEmail,
+                                "password": this.loginPassword,
+                                "request_token": result.request_token
+                            });
+
+                            const requestOptions = {
+                                method: 'POST',
+                                headers: myHeaders,
+                                body: raw,
+                                redirect: 'follow'
+                            };
+
+                            fetch("https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=1f34f8d7ed59df90cec23579d909420f", requestOptions)
+                                .then(response => response.json())
+                                .then(result => {
+                                    if (result.success) {
+                                        alert('Inicio de sesión exitoso!');
+                                        window.location.href = "detailsMovie.html";
+                                    } else {
+                                        this.loginError = 'Error de autenticación. Intenta nuevamente.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    this.loginError = 'Hubo un error en la solicitud. Intenta más tarde.';
+                                });
+                        })
+                        .catch((error) => console.error(error));
                 }
             }
         });
