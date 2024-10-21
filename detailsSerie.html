@@ -44,11 +44,17 @@
     </header>
     <div id="main">
         <div class="card-serie" v-if="serieId">
-
             <div class="imagen">
                 <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path"
                     alt="serie poster">
-
+                <div class="single-info">
+                    <ul> Favorite </ul>
+                    <label class="switch">
+                        <input type="checkbox" v-model="isFavorite" @change="toggleFavorite">
+                        <span class="slider"></span>
+                        <label for="favoriteSwitch"></label>
+                    </label>
+                </div>
             </div>
             <div class="card-content">
                 <div class="serie-info">
@@ -60,8 +66,8 @@
                 <div class="generes">
                     <h3>Category</h3>
                     <ul>
-                        <li v-for="genre in serie.genres">{{ genre.name }}</li>
-                        <!-- <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a> -->
+                        <li v-for="genre in serie.genres"><a href="#" @click.prevent="goToCategory(genre.id)">{{
+                                genre.name }}</a></li>
                     </ul>
                 </div>
                 <div class="details">
@@ -138,6 +144,7 @@
                     rating: 0,
                     videoIdUrl: null,
                     recommendations: [],
+                    isFavorite: false
                 }
             },
             methods: {
@@ -164,6 +171,11 @@
                             console.error('Error:', error);
                         });
                 },
+
+                // checkIfFavorite() {
+                //     const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
+                //     const sessionId = localStorage.getItem('sessionId');
+                // },
 
                 getSerieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -226,7 +238,7 @@
                     return this.openSeasons === seasonId;
                 },
                 goToCategory(genreId) {
-                    window.location.href = `detailsCategory.html?genreId=${genreId}`;
+                    window.location.href = `Categoria.html?genreId=${genreId}`;
                 },
 
                 getRecommendations() {
