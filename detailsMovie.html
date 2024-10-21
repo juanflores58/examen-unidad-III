@@ -6,46 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pelicula</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style type="text/css">
-      
         #main {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            background-color: #9B9ECE; 
+            background-color: #C1BDDB;
             padding: 20px;
         }
 
         .card {
-            background-color: #6665DD; 
+            background-color: #5D5D81;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             width: 90%;
-            max-width: 500px;
-            margin: 10px auto;
+            overflow: hidden;
+            margin: 50px;
+            height: auto;
         }
 
         .card img {
-            width: 120px;
+            width: 150px;
             height: auto;
-            object-fit: cover;
             border-radius: 5px;
-            margin-right: 20px;
+            margin-bottom: 20px;
         }
 
         .card-content {
             flex: 1;
+            text-align: center;
         }
 
         .card-content h2 {
             margin: 0;
             font-size: 1.5rem;
-            color: #000500;
+            color: #04111c;
+            margin-bottom: 10px;
         }
 
         .rating-bar {
@@ -59,16 +61,14 @@
             font-size: 1rem;
             cursor: pointer;
             position: relative;
-            color: #000000;
+            color: #04111c;
         }
 
         .rating-bar input[type="radio"] {
             appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
             width: 20px;
             height: 20px;
-            border: 1px solid #000000;
+            border: 1px solid #04111c;
             background-color: transparent;
             cursor: pointer;
             border-radius: 50%;
@@ -76,24 +76,22 @@
         }
 
         .rating-bar input[type="radio"]:checked {
-            background-color: #473BF0;
-            border-color: #000000;
+            background-color: #3B3355;
+            border-color: #04111c;
         }
 
         button {
             margin-top: 10px;
             padding: 10px;
-            background-color: #473BF0; 
-            color: #000500; 
+            background-color: #3B3355;
+            color: #C1BDDB;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: flex;
-            margin: 0 5px;
         }
 
         button:hover {
-            background-color: #6665DD; 
+            background-color: #5D5D81;
         }
 
         .button-container {
@@ -102,34 +100,111 @@
             width: 100%;
         }
 
-        p, ul {
-            color: #000000; 
+        p,
+        ul {
+            color: #04111c;
         }
+
+        .carousel-container {
+            margin-top: 20px;
+            width: 80vw;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
+
+        .actor-item {
+            min-width: 100px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .actor-image {
+            width: 60px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .carousel-buttons {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .carousel-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .movie-cast {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Estilos para dispositivos móviles */
+        @media (max-width: 768px) {
+            .card {
+                padding: 15px;
+            }
+
+            .card img {
+                width: 120px;
+            }
+
+            .card-content h2 {
+                font-size: 1.2rem;
+            }
+
+            .actor-item {
+                min-width: 80px;
+            }
+
+            .actor-image {
+                width: 50px;
+                height: 70px;
+            }
+
+            .carousel-button {
+                padding: 5px;
+            }
+        } 
     </style>
 </head>
 
 <body>
     <div id="main" class="details">
-
         <div class="card" v-if="movie.id">
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
             <div class="card-content">
                 <h2>{{ movie.title }}</h2>
-                <p><strong>Fecha de lanzamiento:</strong></br> {{ movie.release_date }}</p>
-                <br>
-                <p><strong>Contenido:</strong></p>
-                <p>{{ movie.overview }}</p>
+                <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date }} | <strong>Idioma:</strong> {{ movie.original_language }} | <strong>Popularidad:</strong> {{ movie.popularity }} | <strong>Promedio de votos:</strong> {{ movie.vote_average }} | <strong>Conteo de votos:</strong> {{ movie.vote_count }}</p>
+                <p><strong>Contenido:</strong> {{ movie.overview }}</p>
 
                 <div class="generes">
                     <h3>Géneros:</h3>
                     <ul>
-                        <li v-for="genre in movie.genres">{{ genre.name }}</li>
+                        <li v-for="genre in movie.genres" :key="genre.id">{{ genre.name }}</li>
                     </ul>
                 </div>
-                <p><strong>Idioma:</strong> {{ movie.original_language }}</p>
-                <p><strong>Popularidad:</strong> {{ movie.popularity }}</p>
-                <p><strong>Promedio de votos:</strong> {{ movie.vote_average }}</p>
-                <p><strong>Conteo de votos:</strong> {{ movie.vote_count }}</p>
 
                 <p><strong>Rating de la película:</strong></p>
                 <div class="rating-bar">
@@ -140,9 +215,31 @@
                 <p>Rating seleccionado: {{ selectedRating || 'Ninguno' }}</p>
 
                 <div class="button-container">
-                    <button @click="saveRating()">Guardar Rating</button>
+                    <button @click="saveRating(selectedRating)">Guardar Rating</button>
                     <button @click="deleteRating()">Borrar Rating</button>
                 </div>
+
+                <!-- Carrusel de actores -->
+                <div class="movie-cast">
+                    <h2>Reparto</h2>
+                    <div class="carousel-container">
+                        <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}px)` }">
+                            <div class="actor-item" v-for="(actor, index) in cast" :key="actor.cast_id">
+                                <img v-if="actor.profile_path"
+                                    :src="'https://www.themoviedb.org/t/p/w185' + actor.profile_path"
+                                    alt="Foto de {{ actor.name }}" class="actor-image" />
+                                <img v-else src="../../assets/img/user.png" class="actor-image" />
+                                <p><strong>{{ actor.name }}</strong></p>
+                                <p>como {{ actor.character }}</p>
+                            </div>
+                        </div>
+                        <div class="carousel-buttons">
+                            <button class="carousel-button" @click="prevSlide">Anterior</button>
+                            <button class="carousel-button" @click="nextSlide">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -155,55 +252,67 @@
                 return {
                     movieId: null,
                     movie: {},
-                    selectedRating: null
+                    cast: [],
+                    selectedRating: null,
+                    currentSlide: 0,
+                    apiKey: '0f1911236aa91d9d37ad2b1a76be3c5d' // Agregar tu API key aquí
                 }
             },
             methods: {
-           
                 getDetails(movieId) {
-                    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${this.apiKey}`;
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
                             this.movie = data;
+                            this.getCast(movieId);
                             this.loadRating();
                         })
                         .catch(error => console.error("Error:", error));
                 },
 
-               
                 getMovieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');
                 },
 
-            
-                saveRating() {
-                    const url = 'https://api.themoviedb.org/3//movie/116/rating?session_id';
-                    const payload = {
-                        movieId: this.movieId,
-                        rating: this.selectedRating
-                    };
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
+                getCast(movieId) {
+                    const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${this.apiKey}`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.cast = data.cast;
+                        })
+                        .catch(error => console.error('Error al obtener el reparto:', error));
+                },
+                saveRating(n) {
+                    const movieId = this.movie.id;
+                    const sessionId = localStorage.getItem('session_id');
+                    if (!sessionId) {
+                        alert('Algo ha salido mal.');
+                        return;
+                    }
+                    const data = JSON.stringify({ value: n });
+                    console.log(data);
+                    axios
+                        .post(
+                            `https://api.themoviedb.org/3/movie/${movieId}/rating?session_id=${sessionId}&api_key=${this.apiKey}`,
+                            data,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            },
+                        )
                         .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Error al guardar el rating.');
-                            }
-                            alert('Rating guardado exitosamente!');
+                            console.log(response.data);
+                            alert('Tu raiting se ha almaceado.');
                         })
                         .catch(error => {
-                            console.error('Error al guardar el rating:', error);
+                            console.error(error);
                         });
                 },
 
-            
                 loadRating() {
                     const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`;
                     fetch(url)
@@ -211,11 +320,11 @@
                         .then(data => {
                             this.selectedRating = data.rating || null;
                         })
-                        .catch(error => console.error('Error al cargar el rating:', error));
+                        .catch(error => console.error('Error en la carga del rating:', error));
                 },
 
                 deleteRating() {
-                    const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`; 
+                    const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`;
                     fetch(url, {
                         method: 'DELETE'
                     })
@@ -224,13 +333,25 @@
                                 throw new Error('Error al borrar el rating.');
                             }
                             this.selectedRating = null;
-                            alert('Rating borrado exitosamente!');
+                            alert('Rating borrado!');
                         })
                         .catch(error => console.error('Error al borrar el rating:', error));
                 },
 
                 updateRating() {
                     console.log("Rating seleccionado:", this.selectedRating);
+                },
+
+                prevSlide() {
+                    if (this.currentSlide > 0) {
+                        this.currentSlide--;
+                    }
+                },
+
+                nextSlide() {
+                    if (this.currentSlide < this.cast.length - 1) {
+                        this.currentSlide++;
+                    }
                 }
             },
 
