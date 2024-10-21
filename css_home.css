@@ -7,7 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #abababb0;
+    background-color: #c1bddb;
     color: #000000;
 }
 
@@ -21,7 +21,7 @@ body {
 }
 
 header {
-    background-color: #032541;
+    background-color: #04111c;
     padding: 15px 0;
     color: white;
 }
@@ -69,7 +69,7 @@ nav ul li a {
 
 .search-bar button {
     padding: 5px 10px;
-    background-color: #01b4e4;
+    background-color: #344966;
     color: white;
     border: none;
     cursor: pointer;
@@ -120,7 +120,7 @@ h2 {
 }
 
 .card {
-    background-color: white;
+    background-color: #5d5d81;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -141,7 +141,7 @@ h2 {
 
 .card p {
     font-size: 14px;
-    color: #666;
+    color: #000000;
 }
 
 /* Barra de desplazamiento horizontal personalizada */
@@ -150,12 +150,12 @@ h2 {
 }
 
 .movie-grid::-webkit-scrollbar-thumb {
-    background-color: #ff0101;
+    background-color: #3b3355;
     border-radius: 4px;
 }
 
 .movie-grid::-webkit-scrollbar-track {
-    background-color: #1d06f0;
+    background-color: #aba3df;
 }
 
 .movie-card button {
