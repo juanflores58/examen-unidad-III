@@ -57,10 +57,9 @@
                 };
             },
             created() {
-                fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=es-ES`)
+                fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-EN`)
                     .then(response => response.json())
                     .then(data => {
-                        // Para cada película, buscamos sus palabras clave
                         const keywordPromises = data.results.map(movie => {
                             return fetch(`https://api.themoviedb.org/3/movie/${movie.id}/keywords?api_key=${apiKey}`)
                                 .then(response => response.json())
