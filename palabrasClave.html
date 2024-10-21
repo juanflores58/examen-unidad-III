@@ -37,7 +37,7 @@
     </header>
 
    <div id="app">
-    <h2>Palabra Clave {{ keywordName }}</h2>
+    <h2>Palabra Clave: {{ keywordName }}</h2>
 
     <div class="dropdown">
         <label for="filter">Filtrar por:</label>
@@ -91,9 +91,10 @@
                             .then(data => {
                                 this.keywordName = data.name;
                                 
+                                // Cambiar el idioma a inglés (en-US)
                                 return Promise.all([
-                                    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_keywords=${keywordId}&language=es-ES`).then(res => res.json()),
-                                    fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_keywords=${keywordId}&language=es-ES`).then(res => res.json())
+                                    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_keywords=${keywordId}&language=en-US`).then(res => res.json()),
+                                    fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_keywords=${keywordId}&language=en-US`).then(res => res.json())
                                 ]);
                             })
                             .then(([moviesData, tvData]) => {
@@ -134,9 +135,7 @@
                 app.mount('#app');
             }
 
-
     </script>
-
 
 </body>
 </html>

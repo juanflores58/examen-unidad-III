@@ -74,8 +74,8 @@
                 return {
                     peliculas: [], 
                     filteredResults: [], 
-                    categoriaNombre: '',
-                    categoriaId: null,
+                    categoriaNombre: '', 
+                    categoriaId: null, 
                     selectedType: 'all', 
                     selectedOrder: 'desc' 
                 };
@@ -85,37 +85,50 @@
                 this.categoriaId = urlParams.get('id');
                 if (this.categoriaId) {
                     this.fetchPeliculas();
+                    this.fetchCategoriaNombre(); // Obtener el nombre de la categoría
                 }
             },
             methods: {
                 async fetchPeliculas() {
                     try {
                         const [moviesResponse, tvResponse] = await Promise.all([
-                            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${this.categoriaId}`).then(res => res.json()),
-                            fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=es-ES&with_genres=${this.categoriaId}`).then(res => res.json())
+                            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&with_genres=${this.categoriaId}`).then(res => res.json()),
+                            fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&with_genres=${this.categoriaId}`).then(res => res.json())
                         ]);
 
                         const movies = moviesResponse.results.map(item => ({ ...item, media_type: 'movie' }));
                         const tvShows = tvResponse.results.map(item => ({ ...item, media_type: 'tv' }));
 
-
                         this.peliculas = [...movies, ...tvShows];
-                        this.filteredResults = this.peliculas; //mostrar todo
-                        
-   
-                        const genreResponse = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
-                        const genreData = await genreResponse.json();
-                        const selectedGenre = genreData.genres.find(genre => genre.id == this.categoriaId);
-                        this.categoriaNombre = selectedGenre ? selectedGenre.name : 'Desconocido';
-
+                        this.filteredResults = this.peliculas; // Mostrar todo
                         this.filterResults();
                         this.orderResults();
                     } catch (error) {
                         console.error('Error al obtener las películas y series:', error);
                     }
                 },
+                async fetchCategoriaNombre() {
+                    try {
+                        // Obtener géneros de películas y series
+                        const [movieGenresResponse, tvGenresResponse] = await Promise.all([
+                            fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`).then(res => res.json()),
+                            fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`).then(res => res.json())
+                        ]);
+
+                        const movieGenres = movieGenresResponse.genres || [];
+                        const tvGenres = tvGenresResponse.genres || [];
+
+                        // Unir ambos géneros
+                        const allGenres = [...movieGenres, ...tvGenres];
+
+                        // Buscar el nombre de la categoría
+                        const selectedGenre = allGenres.find(genre => genre.id == this.categoriaId);
+                        this.categoriaNombre = selectedGenre ? selectedGenre.name : 'Unknown';
+                    } catch (error) {
+                        console.error('Error al obtener el nombre de la categoría:', error);
+                    }
+                },
                 filterResults() {
-                    console.log("Aplicando filtro:", this.selectedType); 
                     if (this.selectedType === 'all') {
                         this.filteredResults = this.peliculas;
                     } else if (this.selectedType === 'movie') {
@@ -126,7 +139,6 @@
                     this.orderResults(); 
                 },
                 orderResults() {
-                    console.log("Aplicando orden:", this.selectedOrder); 
                     if (this.selectedOrder === 'desc') {
                         this.filteredResults.sort((a, b) => b.popularity - a.popularity); 
                     } else if (this.selectedOrder === 'asc') {
