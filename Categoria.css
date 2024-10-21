@@ -243,3 +243,68 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     outline: none;
 }
+
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  header {
+    background-color: #04111c;
+    padding: 15px 0;
+    color: white;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-img {
+    width: 150px;
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  .logo h1 {
+    font-size: 24px;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    margin-left: auto;
+  }
+  
+  nav ul li {
+    margin-left: 20px;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .search-bar {
+    display: flex;
+    margin-left: 20px;
+  }
+  
+  .search-bar input {
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  .search-bar button {
+    padding: 5px 10px;
+    background-color: #344966;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  

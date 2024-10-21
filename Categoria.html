@@ -8,25 +8,23 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
+    
     <header>
         <div class="container">
             <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
             <div class="logo">
             </div>
-            <nav class="main-nav">
+            <nav>
                 <ul>
-                    <li><a href="html_index_home.html">Inicio</a></li>
-                    <li><a href="#">Películas</a></li>
-                    <li><a href="homeSerie.html">Series/TV</a></li>
-                    <li><a href="#">Ver Gratis</a></li>
-                    <li><a href="#">Explorar</a></li>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="ListCategoria.html">Categorias</a></li>
+                    <li><a href="homeSerie.html">Explorar Series/TV</a></li>
+                    <li><a href="ListClave.html">Palabras Clave</a></li>
+                    <li><a href="#"></a></li>
                 </ul>
             </nav>
-            <div class="search-bar">
-                <input type="text" placeholder="Buscar...">
-                <button>Buscar</button>
-            </div>
-            <nav class="user-nav">
+
+            <nav>
                 <ul>
                     <li><a href="Login.html">Log in</a></li>
                     <li><a href="#">Logout</a></li>
@@ -34,7 +32,6 @@
             </nav>
         </div>
     </header>
-
     <div id="app">
         <h2>Películas y series en la categoría {{ categoriaNombre }}</h2>
 
@@ -57,11 +54,13 @@
 
         <ul>
             <li v-for="item in filteredResults" :key="item.id">
-                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Poster de {{ item.title || item.name }}" v-if="item.poster_path">
-                <div>
-                    <h3>{{ item.title || item.name }}</h3>
-                    <p>{{ item.overview }}</p>
-                </div>
+                <a href="#" @click.prevent="goToDetails(item)">
+                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="Poster de {{ item.title || item.name }}" v-if="item.poster_path">
+                    <div>
+                        <h3>{{ item.title || item.name }}</h3>
+                        <p>{{ item.overview }}</p>
+                    </div>
+                </a>
             </li>
         </ul>
     </div>
@@ -82,7 +81,7 @@
             },
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
-                this.categoriaId = urlParams.get('genreId'); // Cambiar de 'id' a 'genreId'
+                this.categoriaId = urlParams.get('genreId');
                 if (this.categoriaId) {
                     this.fetchPeliculas();
                     this.fetchCategoriaNombre();
@@ -109,7 +108,6 @@
                 },
                 async fetchCategoriaNombre() {
                     try {
-                        // Obtener géneros de películas y series
                         const [movieGenresResponse, tvGenresResponse] = await Promise.all([
                             fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`).then(res => res.json()),
                             fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`).then(res => res.json())
@@ -118,10 +116,8 @@
                         const movieGenres = movieGenresResponse.genres || [];
                         const tvGenres = tvGenresResponse.genres || [];
 
-                        // Unir ambos géneros
                         const allGenres = [...movieGenres, ...tvGenres];
 
-                        // Buscar el nombre de la categoría
                         const selectedGenre = allGenres.find(genre => genre.id == this.categoriaId);
                         this.categoriaNombre = selectedGenre ? selectedGenre.name : 'Unknown';
                     } catch (error) {
@@ -143,6 +139,13 @@
                         this.filteredResults.sort((a, b) => b.popularity - a.popularity); 
                     } else if (this.selectedOrder === 'asc') {
                         this.filteredResults.sort((a, b) => a.popularity - b.popularity); 
+                    }
+                },
+                goToDetails(item) {
+                    if (item.media_type === 'movie') {
+                        window.location.href = `detailsMovie.html?id=${item.id}`;
+                    } else if (item.media_type === 'tv') {
+                        window.location.href = `detailsSerie.html?id=${item.id}`;
                     }
                 }
             }

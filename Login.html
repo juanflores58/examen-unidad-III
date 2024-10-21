@@ -212,20 +212,20 @@
                                 redirect: 'follow'
                             };
 
-                            fetch("https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=1f34f8d7ed59df90cec23579d909420f", requestOptions)
+                            fetch("https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=0f1911236aa91d9d37ad2b1a76be3c5d", requestOptions)
                                 .then(response => response.json())
                                 .then(result => {
                                     if (result.success) {
                                         alert('Inicio de sesión exitoso!');
                                         window.localStorage("user_token", response.request_token);
-                                        window.location.href = "html_index_home.html";
+                                        window.location.href = "index.html";
                                     } else {
-                                        this.loginError = 'Error de autenticación. Intenta nuevamente.';
+                                        this.loginError = 'Error de autenticación. Intenta de nuevo.';
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
-                                    this.loginError = 'Hubo un error en la solicitud. Intenta más tarde.';
+                                    this.loginError = 'Algo ha salido mal.';
                                 });
                         })
                         .catch((error) => console.error(error));
