@@ -1,92 +1,4 @@
-.container {
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-header {
-  background-color: #032541;
-  padding: 15px 0;
-  color: white;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo-img {
-  width: 150px;
-  height: auto;
-  margin-right: 10px;
-}
-
-.logo h1 {
-  font-size: 24px;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  margin-left: auto;
-}
-
-nav ul li {
-  margin-left: 20px;
-}
-
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-.search-bar {
-  display: flex;
-  margin-left: 20px;
-}
-
-.search-bar input {
-  padding: 5px;
-  font-size: 16px;
-}
-
-.search-bar button {
-  padding: 5px 10px;
-  background-color: #01b4e4;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-#main-serie {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
-  justify-content: center;
-  align-items: flex;
-  min-height: 100vh;
-  background-color: rgb(15 23 42 / 0.1);
-}
-
-.card-serie {
-  background-color: #39455b;
-  padding: 50px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px #444b6e8a;
-  text-align: center;
-  margin: 10px;
-  align-items: center;
-}
-
-img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
+/*#C1BDDB, 5D5D81, 3B3355, 04111c*/
 .container {
   width: 80%;
   margin: 0 auto;
@@ -149,9 +61,34 @@ nav ul li a {
   border: none;
   cursor: pointer;
 }
+#main-serie {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  align-items: flex;
+  min-height: 100vh;
+  background-color: #c1bddb;
+}
 
+.card-serie {
+  background-color: #39455b;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px #444b6e8a;
+  text-align: center;
+  margin: 10px;
+  align-items: center;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
 button {
-  background-color: #335c81;
+  background-color: #5d5d81;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -166,7 +103,7 @@ button {
 }
 
 button:hover {
-  background-color: #274060;
+  background-color: #3b3355;
   transform: scale(1.05);
 }
 
@@ -174,23 +111,4 @@ button:disabled {
   background-color: #ccc;
   color: #666;
   cursor: not-allowed;
-}
-
-
-.banner {
-  background-size: cover;
-  background-position: center;
-  padding: 50px 20px;
-  color: white;
-  text-align: center;
-  height: 400px; /* Ajusta la altura del banner según necesites */
-}
-
-.banner-content h2 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-}
-
-.banner-content p {
-  font-size: 1.2em;
 }

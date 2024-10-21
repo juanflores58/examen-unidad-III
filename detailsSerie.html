@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="detailsSerieStyle.css">
 </head>
 
-<div id="main">
+<body>
     <header>
         <div class="container">
             <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
@@ -42,220 +42,224 @@
             </nav>
         </div>
     </header>
+    <div id="main">
+        <div class="card-serie" v-if="serieId">
 
-    <div class="card-serie" v-if="serieId">
+            <div class="imagen">
+                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path"
+                    alt="serie poster">
 
-        <div class="imagen">
-            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="serie poster">
-
-        </div>
-        <div class="card-content">
-            <div class="serie-info">
-                <h2>{{ serie.name }}</h2>
-                <p>{{ serie.original_name }}</p>
-                <p>{{ serie.overview }}</p>
-                <p><strong>First Air Date:</strong> {{ serie.first_air_date }}</p>
             </div>
-            <div class="generes">
-                <h3>Category</h3>
-                <ul>
-                    <li v-for="genre in serie.genres">{{ genre.name }}</li>
-                    <!-- <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a> -->
-                </ul>
-            </div>
-            <div class="details">
-                <p><strong>Original Language:</strong> {{ serie.original_language }}</p>
-                <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
-                <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
-                <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
-                <!-- <p><strong>Rate this movie:</strong></p> -->
+            <div class="card-content">
+                <div class="serie-info">
+                    <h2>{{ serie.name }}</h2>
+                    <p>{{ serie.original_name }}</p>
+                    <p>{{ serie.overview }}</p>
+                    <p><strong>First Air Date:</strong> {{ serie.first_air_date }}</p>
+                </div>
+                <div class="generes">
+                    <h3>Category</h3>
+                    <ul>
+                        <li v-for="genre in serie.genres">{{ genre.name }}</li>
+                        <!-- <a href="#" @click.prevent="goToCategory(genre.id)">{{ genre.name }}</a> -->
+                    </ul>
+                </div>
+                <div class="details">
+                    <p><strong>Original Language:</strong> {{ serie.original_language }}</p>
+                    <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
+                    <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
+                    <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
+                    <!-- <p><strong>Rate this movie:</strong></p> -->
+                </div>
             </div>
         </div>
-    </div>
-    <!-- <h2>Trailer</h2> -->
-    <iframe class="trailer" v-if="videoIdUrl" width="700" height="415" :src="videoIdUrl" title="YouTube video player"
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-    </iframe>
+        <!-- <h2>Trailer</h2> -->
+        <iframe class="trailer" v-if="videoIdUrl" width="700" height="415" :src="videoIdUrl"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
 
-    <div class="cast" v-if="cast.length > 0">
-        <div class="cast-card" v-for="castMember in cast" :key="castMember.id" @click="goToDetailsArtist(castMember)">
-            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + castMember.profile_path"
-                alt="cast member profile">
-            <p><strong>{{ castMember.name }}</strong></p>
+        <div class="cast" v-if="cast.length > 0">
+            <div class="cast-card" v-for="castMember in cast" :key="castMember.id"
+                @click="goToDetailsArtist(castMember)">
+                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + castMember.profile_path"
+                    alt="cast member profile">
+                <p><strong>{{ castMember.name }}</strong></p>
+            </div>
         </div>
-    </div>
 
 
-    <div class="accordion" id="accordion">
-        <h3>Seasons</h3>
-        <div class="accordion-item" v-for="season in serie.seasons" :key="season.id">
-            <h2 class="accordion-header" :id="'heading' + season.id">
-                <button class="accordion-button" type="button" @click="toggleSeason(season.id)">
-                    Season {{ season.season_number }}: {{ season.name }}
-                </button>
-            </h2>
-            <div :id="'collapse' + season.id" class="accordion-collapse collapse" :class="{ show: isOpen(season.id) }">
-                <div class="accordion-body">
-                    <p><strong>Air Date:</strong> {{ season.air_date }}</p>
-                    <p><strong>Episode Count:</strong> {{ season.episode_count }}</p>
-                    <a :href="'seasonEpisodes.html?serieId=' + serie.id + '&seasonNumber=' + season.season_number">
-                        Lista de episodios
-                    </a>
+        <div class="accordion" id="accordion">
+            <h3>Seasons</h3>
+            <div class="accordion-item" v-for="season in serie.seasons" :key="season.id">
+                <h2 class="accordion-header" :id="'heading' + season.id">
+                    <button class="accordion-button" type="button" @click="toggleSeason(season.id)">
+                        Season {{ season.season_number }}: {{ season.name }}
+                    </button>
+                </h2>
+                <div :id="'collapse' + season.id" class="accordion-collapse collapse"
+                    :class="{ show: isOpen(season.id) }">
+                    <div class="accordion-body">
+                        <p><strong>Air Date:</strong> {{ season.air_date }}</p>
+                        <p><strong>Episode Count:</strong> {{ season.episode_count }}</p>
+                        <a :href="'seasonEpisodes.html?serieId=' + serie.id + '&seasonNumber=' + season.season_number">
+                            Lista de episodios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div v-if="recommendations.length > 0">
+            <h3>Recommendations</h3>
+            <div class="recommendation">
+                <div class="recommendation-card" v-for="recommendation in recommendations" :key="recommendation.id"
+                    @click=" goToRecommendationDetails(recommendation.id)">
+                    <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + recommendation.poster_path"
+                        alt="recommendation poster">
+                    <p><strong>{{ recommendation.name }}</strong></p>
                 </div>
             </div>
         </div>
     </div>
+    <script>
 
+        const app = Vue.createApp({
 
-    <div v-if="recommendations.length > 0">
-        <h3>Recommendations</h3>
-        <div class="recommendation">
-            <div class="recommendation-card" v-for="recommendation in recommendations" :key="recommendation.id"
-                @click=" goToRecommendationDetails(recommendation.id)">
-                <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + recommendation.poster_path"
-                    alt="recommendation poster">
-                <p><strong>{{ recommendation.name }}</strong></p>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-
-    const app = Vue.createApp({
-
-        data() {
-            return {
-                serieId: null,
-                serie: {},
-                cast: [],
-                season: {},
-                openSeasons: null,
-                rating: 0,
-                videoIdUrl: null,
-                recommendations: [],
-            }
-        },
-        methods: {
-            goToDetails(serie) {
-                console.log(`Fetching details for movie ID: ${serie.id}`);
-                const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
-                console.log('API URL:', url)
-
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        this.serie = data;
-                        this.getCast();
-                        this.getVideos();
-                        this.getRecommendations();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+            data() {
+                return {
+                    serieId: null,
+                    serie: {},
+                    cast: [],
+                    season: {},
+                    openSeasons: null,
+                    rating: 0,
+                    videoIdUrl: null,
+                    recommendations: [],
+                }
             },
+            methods: {
+                goToDetails(serie) {
+                    console.log(`Fetching details for movie ID: ${serie.id}`);
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                    console.log('API URL:', url)
 
-            getSerieIdFromUrl() {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get('id');
-            },
-
-
-            getVideos() {
-                const requestOptions = {
-                    method: "GET",
-                    redirect: "follow"
-                };
-
-                fetch(`https://api.themoviedb.org/3/tv/${this.serieId}/videos?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`, requestOptions)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        if (data.results && data.results.length > 0) {
-                            const trailer = data.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
-                            if (trailer) {
-                                this.videoIdUrl = `https://www.youtube.com/embed/${trailer.key}`;
-                            } else {
-                                console.log('No YouTube video found');
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
                             }
-                        }
-                    })
-                    .catch((error) => console.error(error));
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            this.serie = data;
+                            this.getCast();
+                            this.getVideos();
+                            this.getRecommendations();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                },
+
+                getSerieIdFromUrl() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('id');
+                },
+
+
+                getVideos() {
+                    const requestOptions = {
+                        method: "GET",
+                        redirect: "follow"
+                    };
+
+                    fetch(`https://api.themoviedb.org/3/tv/${this.serieId}/videos?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`, requestOptions)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            if (data.results && data.results.length > 0) {
+                                const trailer = data.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+                                if (trailer) {
+                                    this.videoIdUrl = `https://www.youtube.com/embed/${trailer.key}`;
+                                } else {
+                                    console.log('No YouTube video found');
+                                }
+                            }
+                        })
+                        .catch((error) => console.error(error));
+                },
+
+                getCast() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            this.cast = data.cast;
+                        })
+                        .catch(error => {
+
+                        });
+
+                },
+                goToDetailsArtist(castMember) {
+                    window.location.href = `infoartista.html?id=${castMember.id}`;
+                },
+
+                toggleSeason(seasonId) {
+                    this.openSeasons = this.openSeasons === seasonId ? null : seasonId;
+                },
+                isOpen(seasonId) {
+                    return this.openSeasons === seasonId;
+                },
+                goToCategory(genreId) {
+                    window.location.href = `detailsCategory.html?genreId=${genreId}`;
+                },
+
+                getRecommendations() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/recommendations?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.recommendations = data.results;
+                            console.log("Recomendaciones:", data.results);
+                        })
+                        .catch(error => {
+                            console.error('Error obteniendo recomendaciones:', error);
+                        });
+                },
+                goToRecommendationDetails(recommendationId) {
+                    window.location.href = `detailsSerie.html?id=${recommendationId}`;
+                },
             },
 
-            getCast() {
-                const url = `https://api.themoviedb.org/3/tv/${this.serieId}/aggregate_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error: ' + response.status + ' ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        this.cast = data.cast;
-                    })
-                    .catch(error => {
+            mounted() {
+                this.serieId = this.getSerieIdFromUrl();
+                console.log('Serie ID:', this.serieId);
+                if (this.serieId) {
+                    this.goToDetails(this.serieId);
+                    this.getRecommendations();
+                } else {
+                    console.log('No serie ID found');
+                }
 
-                    });
-
-            },
-            goToDetailsArtist(castMember) {
-                window.location.href = `infoartista.html?id=${castMember.id}`;
-            },
-
-            toggleSeason(seasonId) {
-                this.openSeasons = this.openSeasons === seasonId ? null : seasonId;
-            },
-            isOpen(seasonId) {
-                return this.openSeasons === seasonId;
-            },
-            goToCategory(genreId) {
-                window.location.href = `detailsCategory.html?genreId=${genreId}`;
-            },
-
-            getRecommendations() {
-                const url = `https://api.themoviedb.org/3/tv/${this.serieId}/recommendations?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.recommendations = data.results;
-                        console.log("Recomendaciones:", data.results);
-                    })
-                    .catch(error => {
-                        console.error('Error obteniendo recomendaciones:', error);
-                    });
-            },
-            goToRecommendationDetails(recommendationId) {
-                window.location.href = `detailsSerie.html?id=${recommendationId}`;
-            },
-        },
-
-        mounted() {
-            this.serieId = this.getSerieIdFromUrl();
-            console.log('Serie ID:', this.serieId);
-            if (this.serieId) {
-                this.goToDetails(this.serieId);
-                this.getRecommendations();
-            } else {
-                console.log('No serie ID found');
             }
 
-        }
-
-    }).mount('#main')
-</script>
+        }).mount('#main')
+    </script>
 
 </body>
 

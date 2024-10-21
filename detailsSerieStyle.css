@@ -145,7 +145,6 @@ nav ul li a {
   left: 250px;
   top: -230px;
 }
-
 .cast {
   display: flex;
   overflow-x: auto;
@@ -282,12 +281,14 @@ h3 {
 }
 
 h3 {
-  color: #fff;
+  color: #000000;
   margin: 0 0 10px;
   align-items: center;
   text-align: center;
 }
 #main {
+  display: grid;
+  gap: 20px;
   background-color: #c1bddb;
   font-family: Arial;
 }

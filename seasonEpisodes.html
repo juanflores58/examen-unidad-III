@@ -18,11 +18,27 @@
                     <h3>Episode {{ episode.episode_number }}: {{ episode.name }}</h3>
                     <p><strong>Air Date:</strong> {{ episode.air_date }}</p>
                     <p><strong>Overview:</strong> {{ episode.overview }}</p>
+                    <button @click="showGuestsStars(episode)">Show Guests Stars</button>
                 </li>
             </ul>
         </div>
         <div v-else>
             <p>No episodes found for this season.</p>
+        </div>
+        <div v-if="guestsStarsModal" class="modal">
+            <div class="modal-content">
+                <div class="close" @click="closeGuestsStars">&times;</div>
+                <h2>Guests Stars</h2>
+                <ul>
+                    <li v-for="guest in guestStars" :key="guest.id">
+                        <img v-if="guest.profile_path"
+                            :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + guest.profile_path">
+                        <h3>{{ guest.name }}</h3>
+                        <p><strong>Character:</strong> {{ guest.character }}</p>
+
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -32,12 +48,14 @@
                 return {
                     serieId: null,
                     seasonNumber: null,
-                    episodes: []
+                    episodes: [],
+                    guestStars: [],
+                    guestsStarsModal: false
                 }
             },
             methods: {
                 fetchEpisodes() {
-                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/season/${this.seasonNumber}?api_key=e2f892788bdea42be5636a47bc7ffdd5`;
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/season/${this.seasonNumber}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
 
                     fetch(url)
                         .then(response => {
@@ -58,6 +76,36 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     this.serieId = urlParams.get('serieId');
                     this.seasonNumber = urlParams.get('seasonNumber');
+                },
+
+                showGuestsStars(episode) {
+                    const requestOptions = {
+                        method: "GET",
+                        redirect: "follow"
+                    };
+
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/season/${this.seasonNumber}/episode/${episode.episode_number}/credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+
+                    fetch(url, requestOptions)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            this.guestStars = data.guest_stars || [];
+                            console.log("Guest Stars:", this.guestStars);
+                            this.guestsStarsModal = true;
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                },
+
+                closeGuestsStars() {
+                    console.log("close");
+                    this.guestsStarsModal = false;
                 }
             },
             mounted() {
