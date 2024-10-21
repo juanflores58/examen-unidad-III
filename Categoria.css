@@ -13,6 +13,9 @@ header .container {
     background-color: #04111c;
 }
 
+body{
+    background-color: #C1BDDB;
+}
 
 .logo-img {
     width: 150px;
@@ -100,6 +103,7 @@ header {
     text-align: center;
     margin-bottom: 20px;
     color: #282c34;
+
 }
 
 #app ul {
@@ -111,14 +115,16 @@ header {
 }
 
 #app li {
-    background-color: #abababb0;
+    background-color: #5d5d81;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
+    
 }
 
 #app li:hover {
     transform: translateY(-5px);
+    background-color: #5d5d81;
 }
 
 #app a {
@@ -146,6 +152,7 @@ header {
     text-align: center;
     margin-bottom: 20px;
     color: #282c34;
+    font-family: 'Arial', sans-serif;
 }
 
 #app ul {
@@ -156,7 +163,7 @@ header {
 }
 
 #app li {
-    background-color: #fff;
+    background-color:#5d5d81;;;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
@@ -165,6 +172,7 @@ header {
 
 #app li:hover {
     transform: translateY(-5px);
+    color: #5d5d81;
 }
 
 #app li img {
@@ -175,18 +183,21 @@ header {
 
 #app li div {
     padding: 10px;
+    color: #5d5d81;
 }
 
 #app li h3 {
     font-size: 18px;
-    color: #282c34;
+    color: #ffffff;
     margin-bottom: 10px;
+     font-family: 'Arial', sans-serif;
 }
 
 #app li p {
     font-size: 14px;
-    color: #555;
+    color: #ffffff;
     margin-bottom: 5px;
+    font-family: 'Arial', sans-serif;
 }
 
 #app a {
@@ -205,7 +216,7 @@ header {
 
 .dropdown label {
     font-size: 18px;
-    color: #333;
+    color: #04111c;
     margin-right: 10px;
     font-family: 'Arial', sans-serif;
 }

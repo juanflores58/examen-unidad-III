@@ -12,6 +12,9 @@ header .container {
     padding: 20px;
     background-color: #04111c;
 }
+body{
+    background-color: #C1BDDB;
+}
 
 .logo-img {
     width: 150px;
@@ -61,7 +64,7 @@ header .container {
 }
 
 .search-bar button:hover {
-    background-color: #777;
+    background-color: #FFF;
 }
 
 .user-nav ul {
@@ -96,6 +99,7 @@ header {
     text-align: center;
     margin-bottom: 20px;
     color: #282c34;
+    font-family: 'Arial', sans-serif;
 }
 
 #app ul {
@@ -104,13 +108,15 @@ header {
     gap: 15px;
     justify-content: center;
     list-style: none;
+    font-family: 'Arial', sans-serif;
 }
 
 #app li {
-    background-color: #abababb0;
+    background-color: #5d5d81;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
+    font-family: 'Arial', sans-serif;
 }
 
 #app li:hover {
@@ -119,7 +125,7 @@ header {
 
 #app a {
     text-decoration: none;
-    color: #282c34;
+    color: #fff;
     display: block;
     padding: 15px;
     text-align: center;
