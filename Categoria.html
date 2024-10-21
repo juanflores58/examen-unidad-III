@@ -82,10 +82,10 @@
             },
             created() {
                 const urlParams = new URLSearchParams(window.location.search);
-                this.categoriaId = urlParams.get('id');
+                this.categoriaId = urlParams.get('genreId'); // Cambiar de 'id' a 'genreId'
                 if (this.categoriaId) {
                     this.fetchPeliculas();
-                    this.fetchCategoriaNombre(); // Obtener el nombre de la categoría
+                    this.fetchCategoriaNombre();
                 }
             },
             methods: {
