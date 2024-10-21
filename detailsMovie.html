@@ -160,6 +160,28 @@
             align-items: center;
         }
 
+        .trailer-button {
+            background-color: #FF4500;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .trailer-button:hover {
+            background-color: #FF6347;
+            transform: translateY(-2px);
+        }
+
+        .trailer-button:active {
+            transform: translateY(1px);
+        }
+
+
         /* Estilos para dispositivos móviles */
         @media (max-width: 768px) {
             .card {
@@ -186,7 +208,66 @@
             .carousel-button {
                 padding: 5px;
             }
-        } 
+        }
+
+        /*         Peliculas recomendadas 
+ */
+
+
+        .movie-container {
+            margin-top: 20px;
+            width: 80vw;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
+
+        .movie-item {
+            min-width: 100px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .movie-image {
+            width: 60px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .movie-buttons {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .movie-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .movie-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .movie-recomend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -196,7 +277,10 @@
             <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
             <div class="card-content">
                 <h2>{{ movie.title }}</h2>
-                <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date }} | <strong>Idioma:</strong> {{ movie.original_language }} | <strong>Popularidad:</strong> {{ movie.popularity }} | <strong>Promedio de votos:</strong> {{ movie.vote_average }} | <strong>Conteo de votos:</strong> {{ movie.vote_count }}</p>
+                <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date }} | <strong>Idioma:</strong> {{
+                    movie.original_language }} | <strong>Popularidad:</strong> {{ movie.popularity }} | <strong>Promedio
+                        de votos:</strong> {{ movie.vote_average }} | <strong>Conteo de votos:</strong> {{
+                    movie.vote_count }}</p>
                 <p><strong>Contenido:</strong> {{ movie.overview }}</p>
 
                 <div class="generes">
@@ -219,7 +303,11 @@
                     <button @click="deleteRating()">Borrar Rating</button>
                 </div>
 
-                <!-- Carrusel de actores -->
+                <button @click="fetchTrailer(movieId)">Ver Trailer</button>
+
+
+
+
                 <div class="movie-cast">
                     <h2>Reparto</h2>
                     <div class="carousel-container">
@@ -240,6 +328,51 @@
                     </div>
                 </div>
 
+                <div class="movie-recomend">
+                    <h2>Peliculas recomendadas</h2>
+                    <div class="movie-container">
+                        <div class="movie-carousel" :style="{ transform: `translateX(-${currentSlide * 100}px)` }">
+                            <div class="movie-item" v-for="(movie, index) in recomendMovie" :key="movie.id">
+                                <img v-if="movie.poster_path"
+                                    :src="'https://www.themoviedb.org/t/p/w185' + movie.poster_path"
+                                    alt="Foto de {{ movie.name }}" class="movie-image" />
+                                <img v-else src="../../assets/img/user.png" class="movie-image" />
+                                <p><strong>{{ movie.name }}</strong></p>
+                            </div>
+                        </div>
+                        <div class="movie-buttons">
+                            <button class="movie-button" @click="prevSlide">Anterior</button>
+                            <button class="movie-button" @click="nextSlide">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <iframe class="trailer" v-if="videoIdUrl" width="700" height="415" :src="videoIdUrl"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+
+
+
+                <!-- Palabra clave y filtrado -->
+                <div id="app">
+                    <h2>Palabra Clave: {{ keywordName }}</h2>
+                    <div class="dropdown">
+                        <label for="filter">Filtrar por:</label>
+                        <select id="filter" v-model="selectedType" @change="filterResults">
+                            <option value="all">Todo</option>
+                            <option value="movie">Películas</option>
+                            <option value="tv">Series</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" v-model="keywordName" placeholder="Buscar por palabra clave"
+                            @input="filterResults" />
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -255,7 +388,12 @@
                     cast: [],
                     selectedRating: null,
                     currentSlide: 0,
-                    apiKey: '0f1911236aa91d9d37ad2b1a76be3c5d' // Agregar tu API key aquí
+                    apiKey: '0f1911236aa91d9d37ad2b1a76be3c5d',
+                    keywordName: '',
+                    selectedType: 'all',
+                    recomendMovie: [],
+                    videoId: null,
+
                 }
             },
             methods: {
@@ -267,6 +405,8 @@
                             this.movie = data;
                             this.getCast(movieId);
                             this.loadRating();
+                            this.getRecomendMovie(movieId);
+
                         })
                         .catch(error => console.error("Error:", error));
                 },
@@ -285,6 +425,17 @@
                         })
                         .catch(error => console.error('Error al obtener el reparto:', error));
                 },
+
+                getRecomendMovie(movieId) {
+                    const url = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${this.apiKey}`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.recomendMovie = data.results;
+                        })
+                        .catch(error => console.error('Error al obtener el reparto:', error));
+                },
+
                 saveRating(n) {
                     const movieId = this.movie.id;
                     const sessionId = localStorage.getItem('session_id');
@@ -313,6 +464,8 @@
                         });
                 },
 
+
+
                 loadRating() {
                     const url = `https://miapipeliculas.com/api/ratings/${this.movieId}`;
                     fetch(url)
@@ -338,6 +491,33 @@
                         .catch(error => console.error('Error al borrar el rating:', error));
                 },
 
+                async fetchMovie() {
+                    const movieId = w9dRrsKRwgA; // Cambia este ID según la película
+                    try {
+                        const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&language=es-ES`);
+                        this.movie = response.data;
+                        this.cast = response.data.credits.cast;
+                        this.recommendedMovies = response.data.recommendations.results;
+                    } catch (error) {
+                        console.error("Error fetching movie data:", error);
+                    }
+                },
+                async fetchTrailer(movieId) {
+                    try {
+                        const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`);
+                        const videos = response.data.results;
+                        console.log(videos);
+                        const trailer = videos.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+                        if (trailer) {
+                            window.location.href = `https://www.youtube.com/watch?v=${trailer.key}`;
+                        } else {
+                            alert("No se encontró el tráiler.");
+                        }
+                    } catch (error) {
+                        console.error("Error al obtener el tráiler:", error);
+                    }
+                },
+
                 updateRating() {
                     console.log("Rating seleccionado:", this.selectedRating);
                 },
@@ -352,6 +532,11 @@
                     if (this.currentSlide < this.cast.length - 1) {
                         this.currentSlide++;
                     }
+                },
+
+
+                filterResults() {
+                    console.log("Filtrando por palabra clave:", this.keywordName);
                 }
             },
 
