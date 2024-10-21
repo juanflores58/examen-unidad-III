@@ -348,3 +348,21 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(25px);
 }
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reset {
+  margin-left: 10px;
+  background-color: #0d1821;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: Arial;
+  color: white;
+}

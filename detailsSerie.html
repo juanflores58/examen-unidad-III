@@ -18,21 +18,18 @@
         <div class="container">
             <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
             <div class="logo">
-                <h1>WebSite</h1>
+                <h1></h1>
             </div>
             <nav>
                 <ul>
-                    <li><a href="html_index_home.html">Inicio</a></li>
-                    <li><a href="detailsMovie.html">Películas</a></li>
-                    <li><a href="homeSerie.html">Series/TV</a></li>
-                    <li><a href="#">Ver Gratis</a></li>
-                    <li><a href="#">Explorar</a></li>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="ListCategoria.html">Categorias</a></li>
+                    <li><a href="homeSerie.html">Explorar Series/TV</a></li>
+                    <li><a href="ListClave.html">Palabras Clave</a></li>
+                    <li><a href="#"></a></li>
                 </ul>
             </nav>
-            <div class="search-bar">
-                <input type="text" placeholder="Buscar...">
-                <button>Buscar</button>
-            </div>
+
             <nav>
                 <ul>
                     <li><a href="Login.html">Log in</a></li>
@@ -64,6 +61,7 @@
                                     d="M470.935,194.043,333.8,171.757,270.227,48.22a16,16,0,0,0-28.454,0L178.2,171.757,41.065,194.043A16,16,0,0,0,32.273,221.1l97.845,98.636L108.936,457.051a16,16,0,0,0,23.02,16.724L256,411.2l124.044,62.576a16,16,0,0,0,23.02-16.724L381.882,319.74,479.727,221.1A16,16,0,0,0,470.935,194.043Z" />
                             </svg>
                         </span>
+                        <button class="reset" @click="resetRating"> reset </button>
                     </div>
                 </div>
             </div>
@@ -87,6 +85,17 @@
                     <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
                     <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
                     <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
+                </div>
+                <div v-if="keywords.length > 0">
+                    <h3>Keywords</h3>
+                    <div style="display: flex; flex-wrap: wrap;">
+                        <ul v-for="keyword in keywords" :key="keyword.id" style="margin-right: 10px;">
+                            <a :href="`palabrasClave.html?id=${keyword.id}`"
+                                style="background-color: #ffffff; padding: 5px 10px; border-radius: 5px; text-decoration: none; color: rgb(86, 149, 220);">
+                                {{ keyword.name }}
+                            </a>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -157,7 +166,8 @@
                     isFavorite: false,
                     hoveredValue: null,
                     currentRating: 0,
-                    stars: [1, 2, 3, 4, 5]
+                    stars: [1, 2, 3, 4, 5],
+                    keywords: []
                 }
             },
             methods: {
@@ -179,9 +189,31 @@
                             this.getCast();
                             this.getVideos();
                             this.getRecommendations();
+                            this.getKeywords();
                         })
                         .catch(error => {
                             console.error('Error:', error);
+                        });
+                },
+                getKeywords() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.serieId}/keywords?api_key=0f1911236aa91d9d37ad2b1a76be3c5d`;
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status + ' ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.results && data.results.length > 0) {
+                                this.keywords = data.results;
+                            } else {
+                                console.log("No keywords found")
+                            }
+                        })
+
+                        .catch(error => {
+                            console.error('Error', error);
                         });
                 },
 
@@ -192,6 +224,10 @@
 
                 setRating(star) {
                     this.currentRating = star;
+                },
+                resetRating() {
+                    this.currentRating = 0;
+                    this.hoveredValue = 0;
                 },
 
 
@@ -275,6 +311,7 @@
                 console.log('Serie ID:', this.serieId);
                 if (this.serieId) {
                     this.goToDetails(this.serieId);
+                    this.getKeywords();
                     this.getRecommendations();
                 } else {
                     console.log('No serie ID found');
