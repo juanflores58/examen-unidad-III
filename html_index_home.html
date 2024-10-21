@@ -22,6 +22,7 @@
                     <li><a href="html_index_home.html">Inicio</a></li>
                     <li><a href="ListCategoria.html">Categorias</a></li>
                     <li><a href="homeSerie.html">Explorar Series/TV</a></li>
+                    <li><a href="ListClave.html">Palabras Clave</a></li>
                     <li><a href="#"></a></li>
                 </ul>
             </nav>
@@ -38,9 +39,9 @@
         </div>
     </header>
 
+    <!-- Banner -->
     <div id="banner">
-            <h1>Movie Title</h1>
-            <p>Movie Overview</p>
+        <img :src="'https://www.themoviedb.org/t/p/w1280/' + randomMovie.poster_path" alt="Movie Poster" class="banner-img">
     </div>
     
 
@@ -99,73 +100,76 @@
     
     <footer>
         <div class="container">
-            <p>&copy; PAGINA DE PELICULAS PIRATAS PARA LA CLASE DE JHONA todos los derechos reservados SA. DE CV.</p>
+            <p>&copy; PAGINA DE PELICULAS PIRATAS PARA LA CLASE DE JHONA TODOS LOS DERECHOS RESERVADOS SA. DE CV.</p>
         </div>
     </footer>
 
 
-<script>
-    const { createApp } = Vue;
-    createApp({
-        data() {
-            return {
-                trendingMovies: [],
-                popularMovies: [],
-                freeMovies: [],
-                series: [],
-            }
-        },
-        methods: {
-            getTrendingMovies() {
-                fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.trendingMovies = data.results;
-                    })
-                    .catch(error => console.log(error));
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    trendingMovies: [],
+                    popularMovies: [],
+                    freeMovies: [],
+                    series: [],
+                    randomMovie:[],  // Nueva propiedad para la película aleatoria
+                };
             },
-            getPopularMovies() {
-                fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.popularMovies = data.results;
-                    })
-                    .catch(error => console.log(error));
-            },
-            getFreeMovies() {
+            methods: {
+                getTrendingMovies() {
+                    fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.trendingMovies = data.results;
+                            this.setRandomMovie();  // Llamar al método para elegir una película aleatoria
+                        })
+                        .catch(error => console.log(error));
+                },
                 
-                fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.freeMovies = data.results.slice(0, 10); 
-                    })
-                    .catch(error => console.log(error));
+
+                getPopularMovies() {
+                    fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.popularMovies = data.results;
+                        })
+                        .catch(error => console.log(error));
+                },
+                getFreeMovies() {
+                    fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.freeMovies = data.results.slice(0, 10);
+                        })
+                        .catch(error => console.log(error));
+                },
+                getSeries() {
+                    fetch('https://api.themoviedb.org/3/tv/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.series = data.results;
+                        })
+                        .catch(error => console.log(error));
+                },
+                setRandomMovie() {
+                    const randomIndex = Math.floor(Math.random() * this.trendingMovies.length);
+                    this.randomMovie = this.trendingMovies[randomIndex];
+                },
+                goToDetails(item) {
+                    const id = item.id;
+                    const type = item.title ? 'detailsmovie' : 'detailsSerie';
+                    window.location.href = `${type}.html?id=${id}`;
+                }
             },
-            getSeries() {
-                fetch('https://api.themoviedb.org/3/tv/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.series = data.results;
-                    })
-                    .catch(error => console.log(error));
-            },
-
-            goToDetails(item) {
-    const id = item.id;
-    const type = item.title ? 'detailsmovie' : 'detailsSerie'; 
-    window.location.href = `${type}.html?id=${id}`;
-}
-        },
-        mounted() {
-            this.getTrendingMovies();
-            this.getPopularMovies();
-            this.getFreeMovies();
-            this.getSeries();
-        }
-    }).mount('#main-content');
-</script>
-
-
+            mounted() {
+                this.getTrendingMovies();
+                this.getPopularMovies();
+                this.getFreeMovies();
+                this.getSeries();
+            }
+        }).mount('#main-content');
+    </script>
 </body>
-
 </html>

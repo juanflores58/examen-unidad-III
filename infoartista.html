@@ -12,15 +12,25 @@
         <div class="container">
             <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
             <div class="logo">
-                <h1>WebSite</h1>
+                <h1></h1>
             </div>
             <nav>
                 <ul>
                     <li><a href="html_index_home.html">Inicio</a></li>
-                    <li><a href="#">Películas</a></li>
-                    <li><a href="homeSerie.html">Series/TV</a></li>
-                    <li><a href="#">Ver Gratis</a></li>
-                    <li><a href="#">Explorar</a></li>
+                    <li><a href="ListCategoria.html">Categorias</a></li>
+                    <li><a href="homeSerie.html">Explorar Series/TV</a></li>
+                    <li><a href="ListClave.html">Palabras Clave</a></li>
+                    <li><a href="#"></a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button>Buscar</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="Login.html">Log in</a></li>
+                    <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -37,15 +47,26 @@
                 <p>{{ artist.biography }}</p>
             </div>
         </div>
-
+    
         <h3>Series en las que ha trabajado:</h3>
         <div class="series-grid">
-            <div v-for="serie in artistSeries" :key="serie.id" class="serie-card">
+            <a v-for="serie in artistSeries" :key="serie.id" 
+               :href="`detailsSerie.html?id=${serie.id}`" class="serie-card">
                 <img :src="'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="Poster de la serie">
                 <h4>{{ serie.name }}</h4>
-            </div>
+            </a>
+        </div>
+    
+        <h3>Películas en las que ha trabajado:</h3>
+        <div class="movie-grid">
+            <a v-for="movie in artistMovies" :key="movie.id" 
+               :href="`detailsMovie.html?id=${movie.id}`" class="movie-card">
+                <img :src="'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="Poster de la película">
+                <h4>{{ movie.title }}</h4>
+            </a>
         </div>
     </div>
+    
 
     <script>
         const { createApp } = Vue;
@@ -55,6 +76,7 @@
                 return {
                     artist: {},
                     artistSeries: [],
+                    artistMovies: [],
                     artistId: null,
                 };
             },
@@ -73,12 +95,23 @@
                             })
                             .catch(error => console.error(error));
                         
+                        // Solicitud para series
                         const urlSeries = `https://api.themoviedb.org/3/person/${this.artistId}/tv_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&language=es-ES`;
                         
                         fetch(urlSeries)
                             .then(response => response.json())
                             .then(data => {
                                 this.artistSeries = data.cast;
+                            })
+                            .catch(error => console.error(error));
+
+                        // Solicitud para películas
+                        const urlMovies = `https://api.themoviedb.org/3/person/${this.artistId}/movie_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&language=es-ES`;
+                        
+                        fetch(urlMovies)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.artistMovies = data.cast;
                             })
                             .catch(error => console.error(error));
                     }
