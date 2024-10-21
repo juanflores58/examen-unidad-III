@@ -28,6 +28,7 @@ const app = Vue.createApp({
       const response = await fetch('https://api.themoviedb.org/3/person/popular?api_key=' + this.apiKey);
       const data = await response.json();
       this.artists = data.results; // Guarda la lista de artistas
+      console.log 
     },
     async getCast() {
       try {
