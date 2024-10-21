@@ -7,7 +7,6 @@
     <title>Detalles de la Serie</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -55,7 +54,20 @@
                         <label for="favoriteSwitch"></label>
                     </label>
                 </div>
+                <div>
+                    <div class="rating" @mouseover="hoveredValue" @mouseleave="hoveredValue = 0">
+                        <span v-for="star in stars" :key="star" @click="setRating(star)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                :fill="star <= currentRating || star <= hoveredValue ? '#FFF7AE' : '#04111c'" width="30"
+                                height="30">
+                                <path
+                                    d="M470.935,194.043,333.8,171.757,270.227,48.22a16,16,0,0,0-28.454,0L178.2,171.757,41.065,194.043A16,16,0,0,0,32.273,221.1l97.845,98.636L108.936,457.051a16,16,0,0,0,23.02,16.724L256,411.2l124.044,62.576a16,16,0,0,0,23.02-16.724L381.882,319.74,479.727,221.1A16,16,0,0,0,470.935,194.043Z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
             </div>
+
             <div class="card-content">
                 <div class="serie-info">
                     <h2>{{ serie.name }}</h2>
@@ -75,11 +87,9 @@
                     <p><strong>Popularity:</strong> {{ serie.popularity }}</p>
                     <p><strong>Vote Average:</strong> {{ serie.vote_average }}</p>
                     <p><strong>Vote Count:</strong> {{ serie.vote_count }}</p>
-                    <!-- <p><strong>Rate this movie:</strong></p> -->
                 </div>
             </div>
         </div>
-        <!-- <h2>Trailer</h2> -->
         <iframe class="trailer" v-if="videoIdUrl" width="700" height="415" :src="videoIdUrl"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -144,7 +154,10 @@
                     rating: 0,
                     videoIdUrl: null,
                     recommendations: [],
-                    isFavorite: false
+                    isFavorite: false,
+                    hoveredValue: null,
+                    currentRating: 0,
+                    stars: [1, 2, 3, 4, 5]
                 }
             },
             methods: {
@@ -172,14 +185,13 @@
                         });
                 },
 
-                // checkIfFavorite() {
-                //     const apiKey = '0f1911236aa91d9d37ad2b1a76be3c5d';
-                //     const sessionId = localStorage.getItem('sessionId');
-                // },
-
                 getSerieIdFromUrl() {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get('id');
+                },
+
+                setRating(star) {
+                    this.currentRating = star;
                 },
 
 
