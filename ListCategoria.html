@@ -37,8 +37,7 @@
         <h2>Categorías de Películas y Series</h2>
         <ul>
             <li v-for="categoria in categorias" :key="categoria.id">
-                <!-- Cambiamos 'id' por 'genreId' en el enlace para que coincida con 'categoria.html' -->
-                <a :href="'categoria.html?genreId=' + categoria.id">{{ categoria.name }}</a>
+                <a :href="'Categoria.html?genreId=' + categoria.id">{{ categoria.name }}</a>
             </li>
         </ul>
     </div>
@@ -66,8 +65,6 @@
 
                         const movieGenres = movieGenresResponse.genres || [];
                         const tvGenres = tvGenresResponse.genres || [];
-
-                        // Filtramos y combinamos los géneros, eliminando duplicados
                         const allGenres = [...movieGenres, ...tvGenres].filter((genre, index, self) =>
                             index === self.findIndex(g => g.id === genre.id)
                         );
