@@ -37,15 +37,11 @@
     </header>
 
     <!-- Banner -->
-    <div id="banner">
-        <img :src="'https://www.themoviedb.org/t/p/w1280/' + randomMovie.poster_path" alt="Movie Poster" class="banner-img">
-    </div>
-    
+    <div id="banner" class="banner"></div>
 
     <!-- Sección de Tendencias y Series/TV -->
     <main id="main-content">
         <div class="container">
-           
             <section class="tendencias">
                 <h2>Tendencias</h2>
                 <div class="movie-grid">
@@ -57,7 +53,6 @@
                 </div>
             </section>
 
-           
             <section class="popular">
                 <h2>Lo Más Popular</h2>
                 <div class="movie-grid">
@@ -80,7 +75,6 @@
                 </div>
             </section>
 
-           
             <section class="series-tv">
                 <h2>Series o TV</h2>
                 <div class="movie-grid">
@@ -94,13 +88,11 @@
         </div>
     </main>
 
-    
     <footer>
         <div class="container">
             <p>&copy; PAGINA DE PELICULAS PIRATAS PARA LA CLASE DE JHONA TODOS LOS DERECHOS RESERVADOS SA. DE CV.</p>
         </div>
     </footer>
-
 
     <script>
         const { createApp } = Vue;
@@ -111,7 +103,7 @@
                     popularMovies: [],
                     freeMovies: [],
                     series: [],
-                    randomMovie:[],  // Nueva propiedad para la película aleatoria
+                    randomMovie: null,  // Nueva propiedad para la película aleatoria
                 };
             },
             methods: {
@@ -124,8 +116,6 @@
                         })
                         .catch(error => console.log(error));
                 },
-                
-
                 getPopularMovies() {
                     fetch('https://api.themoviedb.org/3/movie/popular?api_key=0f1911236aa91d9d37ad2b1a76be3c5d')
                         .then(response => response.json())
@@ -153,6 +143,13 @@
                 setRandomMovie() {
                     const randomIndex = Math.floor(Math.random() * this.trendingMovies.length);
                     this.randomMovie = this.trendingMovies[randomIndex];
+                    this.setBannerBackground();
+                },
+                setBannerBackground() {
+                    const banner = document.querySelector('.banner');
+                    if (this.randomMovie) {
+                        banner.style.backgroundImage = `url('https://image.tmdb.org/t/p/original/${this.randomMovie.poster_path}')`;
+                    }
                 },
                 goToDetails(item) {
                     const id = item.id;
