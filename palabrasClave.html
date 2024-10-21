@@ -58,11 +58,13 @@
 
     <ul>
         <li v-for="item in filteredResults" :key="item.id">
-            <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="item.title || item.name">
-            <div>
-                <h3>{{ item.title || item.name }}</h3>
-                <p>{{ item.overview }}</p>
-            </div>
+            <a href="#" @click.prevent="goToDetails(item)">
+                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path" alt="item.title || item.name">
+                <div>
+                    <h3>{{ item.title || item.name }}</h3>
+                    <p>{{ item.overview }}</p>
+                </div>
+            </a>
         </li>
     </ul>
 </div>
@@ -91,7 +93,6 @@
                             .then(data => {
                                 this.keywordName = data.name;
                                 
-                                // Cambiar el idioma a inglés (en-US)
                                 return Promise.all([
                                     fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_keywords=${keywordId}&language=en-US`).then(res => res.json()),
                                     fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_keywords=${keywordId}&language=en-US`).then(res => res.json())
@@ -127,6 +128,13 @@
                                 this.filteredResults.sort((a, b) => b.popularity - a.popularity); 
                             } else if (this.selectedOrder === 'asc') {
                                 this.filteredResults.sort((a, b) => a.popularity - b.popularity); 
+                            }
+                        },
+                        goToDetails(item) {
+                            if (item.media_type === 'movie') {
+                                window.location.href = `detailsMovie.html?id=${item.id}`;
+                            } else if (item.media_type === 'tv') {
+                                window.location.href = `detailsSerie.html?id=${item.id}`;
                             }
                         }
                     }
