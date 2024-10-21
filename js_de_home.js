@@ -1,7 +1,7 @@
-const API_TOKEN = 'your_api_token'; // Asegúrate de proteger tu token
+const API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZjE5MTEyMzZhYTkxZDlkMzdhZDJiMWE3NmJlM2M1ZCIsIm5iZiI6MTcyOTQ3MDQ5NC4yMTE0MzcsInN1YiI6IjY3MDZiZmIwYTg4NjE0ZDZiMDhiMGYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.snL8HmtpWNPRre3ekS6LSb20PGPJ3djfNRLuFx9_CMw'; 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
-const api_key = '0f1911236aa91d9d37ad2b1a76be3c5d'; // Asegúrate de proteger tu API key
+const api_key = '0f1911236aa91d9d37ad2b1a76be3c5d'; 
 
 async function loadBannerMovie() {
     try {

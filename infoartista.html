@@ -1,47 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kathryn Hahn - Actor Details</title>
-  <link rel="stylesheet" href="infoartista.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artista - Detalles</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="infoartista.css">
 </head>
 <body>
-  <div id="app">
-    <div v-if="person">
-      <!-- Foto del actor/actriz -->
-      <img :src="imageUrl" alt="Profile Picture" class="profile-pic" v-if="person.profile_path"/>
-
-      <!-- Información Principal -->
-      <h1>{{ person.name }}</h1>
-      <p><strong>Birthday:</strong> {{ person.birthday || 'Not available' }}</p>
-      <p><strong>Place of Birth:</strong> {{ person.place_of_birth || 'Not available' }}</p>
-      <p><strong>Biography:</strong> {{ person.biography || 'Not available' }}</p>
-
-      <!-- Conocido por (Películas/Series destacadas) -->
-      <h2>Known For</h2>
-      <div class="known-for">
-        <div v-for="movie in knownFor" :key="movie.id">
-          <img :src="getPosterUrl(movie.poster_path)" alt="movie.title" class="poster" v-if="movie.poster_path" />
-          <p>{{ movie.title || movie.name }}</p>
+    <header>
+        <div class="container">
+            <img src="logoB.png" alt="Logo de Cinema" class="logo-img">
+            <div class="logo">
+                <h1>WebSite</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="html_index_home.html">Inicio</a></li>
+                    <li><a href="#">Películas</a></li>
+                    <li><a href="homeSerie.html">Series/TV</a></li>
+                    <li><a href="#">Ver Gratis</a></li>
+                    <li><a href="#">Explorar</a></li>
+                </ul>
+            </nav>
         </div>
-      </div>
+    </header>
 
-      <!-- Lista de todas las películas y series -->
-      <h2>Filmography</h2>
-      <div class="filmography">
-        <div v-for="credit in combinedCredits" :key="credit.id">
-          <p>{{ credit.title || credit.name }} ({{ credit.release_date || credit.first_air_date }}) - {{ credit.character }}</p>
+    <div id="artist-details">
+        <div class="artist-info">
+            <img :src="'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' + artist.profile_path" alt="Foto del artista">
+            <div class="details">
+                <h2>{{ artist.name }}</h2>
+                <p><strong>Fecha de nacimiento:</strong> {{ artist.birthday }}</p>
+                <p><strong>Lugar de nacimiento:</strong> {{ artist.place_of_birth }}</p>
+                <p><strong>Biografía:</strong></p>
+                <p>{{ artist.biography }}</p>
+            </div>
         </div>
-      </div>
+
+        <h3>Series en las que ha trabajado:</h3>
+        <div class="series-grid">
+            <div v-for="serie in artistSeries" :key="serie.id" class="serie-card">
+                <img :src="'https://image.tmdb.org/t/p/w600_and_h900_bestv2/' + serie.poster_path" alt="Poster de la serie">
+                <h4>{{ serie.name }}</h4>
+            </div>
+        </div>
     </div>
 
-    <!-- Mensaje si no se ha cargado la persona aún -->
-    <div v-else>
-      <p>Loading actor details...</p>
-    </div>
-  </div>
+    <script>
+        const { createApp } = Vue;
 
-  <script src="infoartista.js"></script>
+        createApp({
+            data() {
+                return {
+                    artist: {},
+                    artistSeries: [],
+                    artistId: null,
+                };
+            },
+            methods: {
+                getArtistDetails() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.artistId = urlParams.get('id');
+
+                    if (this.artistId) {
+                        const url = `https://api.themoviedb.org/3/person/${this.artistId}?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&language=es-ES`;
+                        
+                        fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.artist = data;
+                            })
+                            .catch(error => console.error(error));
+                        
+                        const urlSeries = `https://api.themoviedb.org/3/person/${this.artistId}/tv_credits?api_key=0f1911236aa91d9d37ad2b1a76be3c5d&language=es-ES`;
+                        
+                        fetch(urlSeries)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.artistSeries = data.cast;
+                            })
+                            .catch(error => console.error(error));
+                    }
+                }
+            },
+            mounted() {
+                this.getArtistDetails();
+            }
+        }).mount('#artist-details');
+    </script>
+
 </body>
 </html>

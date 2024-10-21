@@ -1,52 +1,61 @@
 const app = Vue.createApp({
-    data() {
-      return {
-        personId: 17696, // ID de Kathryn Hahn
-        apiKey: '0f1911236aa91d9d37ad2b1a76be3c5d', // Tu API Key de TMDb
-        person: null,
-        combinedCredits: [],
-        knownFor: []
-      };
+  data() {
+    return {
+      selectedArtistId: 17696, // ID inicial (Kathryn Hahn)
+      apiKey: '0f1911236aa91d9d37ad2b1a76be3c5d',
+      person: null,
+      combinedCredits: [],
+      knownFor: [],
+      artists: [], // Lista de artistas para seleccionar
+    };
+  },
+  computed: {
+    imageUrl() {
+      return this.person && this.person.profile_path 
+        ? `https://image.tmdb.org/t/p/w500${this.person.profile_path}`
+        : 'https://via.placeholder.com/200'; // Placeholder si no hay imagen
     },
-    computed: {
-      imageUrl() {
-        // Si no hay una foto de perfil disponible, mostrar un placeholder
-        return this.person && this.person.profile_path 
-          ? `https://image.tmdb.org/t/p/w500${this.person.profile_path}`
-          : 'https://via.placeholder.com/200'; // Placeholder en caso de que no haya imagen
+    gender() {
+      if (this.person && this.person.gender) {
+        return this.person.gender === 1 ? 'Female' : 'Male'; // 1 para femenino, 2 para masculino
       }
-    },
-    methods: {
-      async fetchPersonDetails() {
-        try {
-          // Petición para obtener los detalles de la persona
-          const personResponse = await fetch(`https://api.themoviedb.org/3/person/${this.personId}?api_key=${this.apiKey}`);
-          const personData = await personResponse.json();
-          console.log('Person data:', personData); // Verifica si los datos de la persona llegan correctamente
-          this.person = personData;
-  
-          // Petición para obtener los créditos combinados (películas y series)
-          const creditsResponse = await fetch(`https://api.themoviedb.org/3/person/${this.personId}/combined_credits?api_key=${this.apiKey}`);
-          const creditsData = await creditsResponse.json();
-          console.log('Credits data:', creditsData); // Verifica si los créditos llegan correctamente
-          this.combinedCredits = creditsData.cast;
-          this.knownFor = this.combinedCredits.slice(0, 5); // Los primeros 5 conocidos
-  
-        } catch (error) {
-          console.error('Error fetching data:', error); // Ver error si ocurre un problema
-        }
-      },
-      getPosterUrl(posterPath) {
-        // Verificar si la película tiene una imagen y devolver la URL correcta
-        return posterPath 
-          ? `https://image.tmdb.org/t/p/w200${posterPath}`
-          : 'https://via.placeholder.com/100'; // Placeholder en caso de que no haya imagen
-      }
-    },
-    mounted() {
-      this.fetchPersonDetails();
+      return 'Not available';
     }
-  });
-  
-  app.mount('#app');
-  
+  },
+  methods: {
+    async fetchArtists() {
+      // Aquí puedes hacer una llamada a la API para obtener la lista de artistas, o puedes definirlos manualmente.
+      const response = await fetch('https://api.themoviedb.org/3/person/popular?api_key=' + this.apiKey);
+      const data = await response.json();
+      this.artists = data.results; // Guarda la lista de artistas
+    },
+    async getCast() {
+      try {
+        // Obtener detalles del artista seleccionado
+        const personResponse = await fetch(`https://api.themoviedb.org/3/person/${this.selectedArtistId}?api_key=${this.apiKey}`);
+        const personData = await personResponse.json();
+        this.person = personData;
+
+        // Obtener los créditos combinados (películas y series)
+        const creditsResponse = await fetch(`https://api.themoviedb.org/3/person/${this.selectedArtistId}/combined_credits?api_key=${this.apiKey}`);
+        const creditsData = await creditsResponse.json();
+        this.combinedCredits = creditsData.cast;
+        this.knownFor = this.combinedCredits.slice(0, 5); // Los primeros 5 conocidos
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+    getPosterUrl(posterPath) {
+      return posterPath 
+        ? `https://image.tmdb.org/t/p/w200${posterPath}`
+        : 'https://via.placeholder.com/100'; // Placeholder si no hay imagen
+    }
+  },
+  mounted() {
+    this.fetchArtists(); // Llamada para obtener la lista de artistas
+    this.getCast(); // Obtener la información inicial del artista
+  }
+});
+
+app.mount('#app');
